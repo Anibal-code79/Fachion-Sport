@@ -1,0 +1,601 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Fashion Sport | Moda esportiva com estilo</title>
+  
+  <!-- FONTES DO GOOGLE FONTS -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <!-- preconnect abre a ligação com o servidor do Google antes de pedir a fonte, tornando mais rápido -->
+
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <!-- segundo preconnect para o servidor de ficheiros estáticos do Google Fonts -->
+
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <!-- carrega a fonte "Poppins" em vários pesos (300=fino até 800=negrito grosso) -->
+
+  <link rel="stylesheet" href="style.css" />
+  <!-- liga o ficheiro de estilos CSS externo à página HTML -->
+
+</head>
+
+<body>
+  <!-- ================= HEADER (CABEÇALHO) ================= -->
+  <header>
+  <!-- <header> é a barra do topo da página (logotipo + menu de navegação) -->
+
+    <div class="container nav">
+    <!-- .container limita a largura do conteúdo ao centro da página -->
+    <!-- .nav é a classe que estiliza esta área como barra de navegação -->
+
+      <a href="#inicio" class="logo" id="logoLink">Fashion<span>Sport</span></a>
+      <nav class="menu">
+        <a class="link" href="#inicio">Início</a>
+        <a class="link" href="#produtos">Produtos</a>
+        <a class="link" href="#sobre">Sobre</a>
+        <a class="link" href="#contato">Contato</a>
+         <button class="search-btn" type="button" id="openSearchBtn" aria-label="Pesquisar produtos">
+  🔍 Pesquisar
+</button>
+        <button class="btn btn-outline" type="button" id="openCartBtn">
+        <!-- id="openCartBtn" é usado pelo JavaScript para abrir o modal do carrinho -->
+
+          🛒 Carrinho (<span id="cart-count">0</span>)
+          <!-- ícone de carrinho + texto + número de itens -->
+          <!-- id="cart-count" é atualizado pelo JavaScript quando se adicionam produtos -->
+        </button>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <!-- ================= HERO (SECÇÃO PRINCIPAL / BANNER) ================= -->
+    <section class="hero" id="inicio">
+
+      <div class="container hero-grid">
+      <!-- hero-grid aplica um layout de 2 colunas (texto + imagem) -->
+
+        <div class="hero-text reveal">
+        <!-- class="reveal" faz com que este elemento apareça com animação ao entrar no ecrã -->
+
+          <h1>Vista o Jogo e Domine o campo, <span>Futebooll</span> e inspiracao.</h1>
+          <!-- <h1> é o título principal da página (deve existir apenas 1 por página) -->
+          <!-- <span> envolve "Futebooll" para aplicar cor diferente com CSS -->
+
+          <p>
+            Queres jogar com estilo, faca a sua encomenda agora, Tênis, camisetas de clubes, luvas e acessórios com qualidade profissional.
+          </p>
+          <!-- <p> é um parágrafo de texto descritivo -->
+
+          <div class="hero-actions">
+          <!-- div que agrupa os botões de ação do hero -->
+
+            <a href="#produtos" class="btn btn-primary">Ver coleção</a>
+            <!-- link estilizado como botão que leva o utilizador à secção de produtos -->
+
+            <button type="button" class="btn btn-outline" id="talkBtn">Fale conosco</button>
+            <!-- botão que o JavaScript vai configurar para abrir o WhatsApp -->
+            <!-- id="talkBtn" é capturado em setupContactLinks() no script.js -->
+          </div>
+
+          <div class="hero-info">
+          <!-- div com caixas de informação rápida (estatísticas) -->
+
+            <div class="info-box"><strong>+100</strong><span>Produtos</span></div>
+            <!-- <strong> deixa o texto em negrito e indica importância -->
+
+            <div class="info-box"><strong>24h</strong><span>Atendimento online</span></div>
+            <!-- segunda caixa de info -->
+          </div>
+        </div>
+
+        <div class="hero-image reveal">
+        <!-- coluna da direita com a imagem principal -->
+
+          <div class="image-card">
+          <!-- envolve a imagem para aplicar borda arredondada e sombra -->
+
+            <img
+              src="tenis1.jpg"
+              alt="Pessoa usando roupa esportiva">
+            <!-- <img> exibe a imagem -->
+            <!-- src="tenis1.jpg" é o caminho do ficheiro de imagem -->
+            <!-- alt="..." descreve a imagem para utilizadores com leitores de ecrã (acessibilidade) -->
+          </div>
+        </div>
+      </div>
+    </section>
+    <!-- ================= PRODUTOS EM DESTAQUE ================= -->
+<section class="section featured-section" id="destaques">
+  <div class="container">
+    <div class="section-title reveal">
+      <span>Produtos em destaque</span>
+      <h2>Os favoritos da Fashion Sport</h2>
+      <p>Confira alguns dos produtos mais procurados da nossa coleção.</p>
+    </div>
+
+    <div class="featured-grid" id="featured-products"></div>
+  </div>
+</section>
+
+    <!-- ================= PRODUTOS ================= -->
+    <section class="section" id="produtos">
+    <!-- secção com id="produtos" para ser alcançada pelos links de navegação -->
+
+      <div class="container">
+
+        <div class="section-title reveal">
+        <!-- div com o título e subtítulo da secção -->
+
+          <span>Nossos produtos</span>
+          <h2>Vista-se como um verdadeiro campeão.</h2>
+          <!-- <span> inline, aqui usado como rótulo/label colorido acima do título -->
+
+          <p>Qualidade profissional para dentro e fora do campo</p>
+          <!-- parágrafo de subtítulo da secção -->
+        </div>
+
+        <div class="products-grid">
+        <!-- grelha CSS que organiza os produtos em 4 colunas -->
+
+          <!-- ===== CARD DE PRODUTO 1: TÊNIS/CHUTEIRAS ===== -->
+          <article class="product-card">
+          <!-- <article> é semântico para conteúdo independente (um produto é autocontido) -->
+
+            <div class="product-image">
+            <!-- div da imagem do produto -->
+
+              <img src="tenis6.jpg" alt="Tênis e chuteiras">
+              <!-- imagem do produto com texto alternativo descritivo -->
+
+              <div class="product-overlay">
+              <!-- camada que aparece sobre a imagem quando se passa o rato (hover) -->
+
+                <button class="overlay-btn" type="button" data-open-category="1">Ver detalhes</button>
+                <!-- data-open-category="1" é um atributo customizado (data attribute) -->
+                <!-- o JavaScript lê este valor para saber qual categoria abrir -->
+              </div>
+            </div>
+
+            <div class="product-content">
+            <!-- área de texto abaixo da imagem do produto -->
+
+              <div class="category">⚽ Tênis / Chuteiras</div>
+              <!-- rótulo da categoria com ícone emoji -->
+
+              <h3>Tênis & Chuteiras</h3>
+              <!-- <h3> título do produto (nível 3 de hierarquia) -->
+
+              <p>Modelos para futebol, futsal e treino. Conforto e aderência.</p>
+              <!-- descrição curta do produto -->
+
+              <div class="product-footer">
+              <!-- div com preço e botão de compra lado a lado -->
+
+                <span class="price">A partir de 1300,00</span>
+                <!-- preço do produto -->
+
+                <button class="mini-link" type="button" data-open-category="1">Comprar</button>
+                <!-- botão pequeno que também abre a categoria 1, igual ao "Ver detalhes" -->
+              </div>
+            </div>
+          </article>
+
+          <!-- ===== CARD DE PRODUTO 2: CAMISETAS ===== -->
+          <article class="product-card">
+            <div class="product-image">
+              <img src="clube1.jpg" alt="Camisetas de clubes">
+              <div class="product-overlay">
+                <button class="overlay-btn" type="button" data-open-category="2">Ver detalhes</button>
+                <!-- data-open-category="2" abre a categoria de camisetas -->
+              </div>
+            </div>
+            <div class="product-content">
+              <div class="category">👕 Camisetas de Clubes</div>
+              <h3>Camisetas de Clubes</h3>
+              <p>Estilo de jogo e lifestyle. Vários tamanhos, modelos e tecidos originais.</p>
+              <div class="product-footer">
+                <span class="price">A partir de 1000,00</span>
+                <button class="mini-link" type="button" data-open-category="2">Comprar</button>
+              </div>
+            </div>
+          </article>
+
+          <!-- ===== CARD DE PRODUTO 3: LUVAS ===== -->
+          <article class="product-card reveal">
+            <div class="product-image">
+              <img src="luvas7.jpg" alt="Luvas esportivas">
+              <div class="product-overlay">
+                <button class="overlay-btn" type="button" data-open-category="3">Ver detalhes</button>
+                <!-- data-open-category="3" abre a categoria de luvas -->
+              </div>
+            </div>
+            <div class="product-content">
+              <div class="category">🧤 Luvas Esportivas</div>
+              <h3>Luvas Esportivas</h3>
+              <p>Mais grip, proteção e conforto para treino e jogo de transformacao ao campo.</p>
+              <div class="product-footer">
+                <span class="price">A partir de 300,00</span>
+                <button class="mini-link" type="button" data-open-category="3">Comprar</button>
+              </div>
+            </div>
+          </article>
+
+          <!-- ===== CARD DE PRODUTO 4: ACESSÓRIOS ===== -->
+          <article class="product-card">
+            <div class="product-image">
+              <img src="acessorio1.jpg" alt="Acessórios esportivos">
+              <div class="product-overlay">
+                <button class="overlay-btn" type="button" data-open-category="4">Ver detalhes</button>
+                <!-- data-open-category="4" abre a categoria de acessórios -->
+              </div>
+            </div>
+            <div class="product-content">
+              <div class="category">🎒 Acessórios</div>
+              <h3>Acessórios</h3>
+              <p>Bolsas, meias, Bolas entre outros acessorios de qualidade no campo onde ha transformacao.</p>
+              <div class="product-footer">
+                <span class="price">A partir de 60,00</span>
+                <button class="mini-link" type="button" data-open-category="4">Comprar</button>
+              </div>
+            </div>
+          </article>
+
+        </div>
+        <!-- fim .products-grid -->
+      </div>
+    </section>
+
+    <!-- ================= SOBRE ================= -->
+    <section class="section" id="sobre">
+    <!-- secção "sobre a empresa" -->
+
+      <div class="about-box reveal">
+      <!-- caixa com layout de 2 colunas: imagem + texto -->
+
+        <div class="about-image">
+        <!-- coluna da esquerda com imagem decorativa -->
+          <img src="bola2.jpg" alt="Moda esportiva">
+        </div>
+
+        <div class="about-content">
+        <!-- coluna da direita com texto descritivo da empresa -->
+
+          <h3>Sobre a Fashion Sport</h3>
+          <!-- título da secção sobre -->
+
+          <p>A Fashion Sporty é uma loja online dedicada aos apaixonados por futebol.</p>
+          <!-- primeiro parágrafo descritivo -->
+
+          <p>Oferecendo uma seleção completa de vestuário e equipamentos...</p>
+          <!-- segundo parágrafo -->
+
+          <div class="features">
+          <!-- grelha 2x2 com características/diferenciais da loja -->
+
+            <div class="feature"><strong>Qualidade</strong><span>Ótimo acabamento.</span></div>
+            <!-- cada .feature é uma caixinha com título em negrito e descrição abaixo -->
+
+            <div class="feature"><strong>Original</strong><span>Tendências versaties.</span></div>
+            <div class="feature"><strong>Loja online</strong><span>Compre de qualquer lugar.</span></div>
+            <div class="feature"><strong>Atendimento rápido</strong><span>Suporte ágil.</span></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= CONTATO ================= -->
+    <section class="section" id="contato">
+
+      <div class="container">
+
+        <div class="section-title reveal">
+          <span>Entre em contato</span>
+          <h2>Estamos prontos para ajudar você.</h2>
+        </div>
+
+        <div class="contact-grid">
+        <!-- grelha de 4 colunas com os cards de contacto -->
+
+          <!-- CARD WHATSAPP -->
+          <a class="contact-card reveal contact-whatsapp" id="wa-contact-link" href="#" target="_blank" rel="noopener">
+          <!-- <a> torna o card inteiro clicável (link) -->
+          <!-- href="#" é preenchido pelo JavaScript com o link real do WhatsApp -->
+          <!-- target="_blank" abre numa nova aba do navegador -->
+          <!-- rel="noopener" é segurança: evita que a nova aba aceda à janela original -->
+          <!-- id="wa-contact-link" é usado pelo JavaScript para definir o href correto -->
+
+            <span class="contact-icon" aria-hidden="true">
+            <!-- aria-hidden="true" esconde este ícone decorativo dos leitores de ecrã -->
+
+              <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+              <path d="M20.52 3.48A11.86 11.86 0 0 0 12.06 0C5.5 0 .16 5.34.16 11.9c0 2.1.55 4.15 1.6 5.96L0 24l6.32-1.66a11.86 11.86 0 0 0 5.74 1.46h.01c6.56 0 11.9-5.34 11.9-11.9 0-3.18-1.24-6.16-3.45-8.42ZM12.07 21.7h-.01a9.8 9.8 0 0 1-4.99-1.37l-.36-.21-3.75.98 1-3.65-.24-.37a9.78 9.78 0 0 1-1.5-5.18c0-5.42 4.41-9.83 9.84-9.83 2.63 0 5.1 1.02 6.95 2.88a9.78 9.78 0 0 1 2.87 6.95c0 5.42-4.41 9.83-9.83 9.83Zm5.39-7.35c-.3-.15-1.77-.87-2.05-.97-.27-.1-.47-.15-.67.15-.2.3-.77.97-.94 1.17-.17.2-.35.22-.65.07-.3-.15-1.25-.46-2.39-1.46-.88-.79-1.48-1.76-1.65-2.06-.17-.3-.02-.46.13-.61.13-.13.3-.35.45-.52.15-.17.2-.3.3-.5.1-.2.05-.37-.02-.52-.07-.15-.67-1.62-.92-2.22-.24-.58-.49-.5-.67-.5h-.57c-.2 0-.52.07-.79.37-.27.3-1.04 1.02-1.04 2.5s1.07 2.91 1.22 3.11c.15.2 2.1 3.2 5.09 4.48.71.31 1.27.5 1.7.64.71.23 1.35.2 1.86.12.57-.08 1.77-.72 2.02-1.42.25-.7.25-1.29.17-1.42-.07-.12-.27-.2-.57-.35Z"/>
+              </svg>
+            </span>
+
+            <h4>WhatsApp</h4>
+            <!-- título do card -->
+
+            <p>Clique para conversar</p>
+            <!-- descrição curta -->
+
+            <span class="contact-cta">Abrir chat</span>
+            <!-- CTA = Call To Action (chamada à ação), texto sublinhado no fundo do card -->
+          </a>
+
+          <!-- CARD INSTAGRAM -->
+          <a class="contact-card reveal contact-instagram" id="ig-contact-link" href="#" target="_blank" rel="noopener">
+          <!-- id="ig-contact-link" → JavaScript preenche com CONFIG.instagramUrl -->
+            <span class="contact-icon" aria-hidden="true">
+             <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+             <path d="M7.75 2C4.57 2 2 4.57 2 7.75v8.5C2 19.43 4.57 22 7.75 22h8.5C19.43 22 22 19.43 22 16.25v-8.5C22 4.57 19.43 2 16.25 2h-8.5Zm0 1.8h8.5c2.19 0 3.95 1.76 3.95 3.95v8.5c0 2.19-1.76 3.95-3.95 3.95h-8.5c-2.19 0-3.95-1.76-3.95-3.95v-8.5C3.8 5.56 5.56 3.8 7.75 3.8Zm8.9 1.35a1.2 1.2 0 1 0 0 2.4 1.2 1.2 0 0 0 0-2.4ZM12 6.85A5.15 5.15 0 1 0 17.15 12 5.16 5.16 0 0 0 12 6.85Zm0 1.8A3.35 3.35 0 1 1 8.65 12 3.35 3.35 0 0 1 12 8.65Z"/>
+             </svg>
+            </span>
+            <h4>Instagram</h4>
+            <p>@fashionsport</p>
+            <span class="contact-cta">Ver perfil</span>
+          </a>
+
+          <!-- CARD FACEBOOK -->
+          <a class="contact-card reveal contact-facebook" id="fb-contact-link" href="#" target="_blank" rel="noopener">
+          <!-- id="fb-contact-link" → JavaScript preenche com CONFIG.facebookUrl -->
+            <span class="contact-icon" aria-hidden="true">
+             <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+             <path d="M13.5 22v-8.2h2.77l.42-3.22H13.5V8.52c0-.93.26-1.56 1.6-1.56h1.71V4.08c-.3-.04-1.31-.08-2.49-.08-2.46 0-4.14 1.5-4.14 4.26v2.3H7.4v3.22h2.78V22h3.32Z"/>
+             </svg>
+            </span>
+            <h4>Facebook</h4>
+            <p>/fashionsport</p>
+            <span class="contact-cta">Abrir página</span>
+          </a>
+
+          <!-- CARD EMAIL -->
+          <a class="contact-card reveal contact-email" id="mail-contact-link" href="#">
+          <!-- id="mail-contact-link" → JavaScript preenche com mailto: link -->
+            <span class="contact-icon" aria-hidden="true">
+             <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+             <path d="M4 4h16a2 2 0 0 1 2 2v.4l-10 6.25L2 6.4V6a2 2 0 0 1 2-2Zm18 4.15V18a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V8.15l9.47 5.92a1 1 0 0 0 1.06 0L22 8.15Z"/>
+             </svg>
+            </span>
+            <h4>E-mail</h4>
+            <p>contato@fashionsport.com</p>
+            <span class="contact-cta">Enviar</span>
+          </a>
+
+        </div>
+        <!-- fim .contact-grid -->
+      </div>
+    </section>
+
+  </main>
+  <!-- fim do conteúdo principal -->
+
+  <!-- ================= FOOTER (RODAPÉ) ================= -->
+  <footer>
+  <!-- <footer> é o rodapé da página -->
+
+    <div class="container footer-content">
+      <p>© 2026 Fashion Sport — Todos os direitos reservados.</p>
+      <!-- aviso de copyright -->
+    </div>
+  </footer>
+
+  <!-- ================= MODAL DO PRODUTO ================= -->
+  <div id="product-modal" class="modal" aria-hidden="true">
+  <!-- modal é uma janela que aparece sobre a página -->
+  <!-- aria-hidden="true" diz aos leitores de ecrã que está escondido (muda quando abre) -->
+
+    <div class="modal-content">
+    <!-- caixa branca central do modal -->
+
+      <button class="modal-close" type="button" id="closeProductModalBtn" aria-label="Fechar">&times;</button>
+      <!-- botão X para fechar o modal -->
+      <!-- &times; é o caractere × (X) em HTML -->
+      <!-- aria-label="Fechar" descreve o botão para leitores de ecrã -->
+
+      <div class="product-detail" id="product-detail-content"></div>
+      <!-- div vazia que o JavaScript vai preencher com os detalhes do produto -->
+    </div>
+  </div>
+
+  <!-- ================= MODAL DO CARRINHO ================= -->
+  <div id="cart-modal" class="modal" aria-hidden="true">
+
+    <div class="modal-content">
+
+      <button class="modal-close" type="button" id="closeCartBtn" aria-label="Fechar">&times;</button>
+      <!-- botão para fechar o modal do carrinho -->
+
+      <h2 class="cart-title">Meu Carrinho</h2>
+      <!-- título do modal do carrinho -->
+
+      <div class="cart-items" id="cart-items"></div>
+      <!-- área onde o JavaScript vai listar os produtos no carrinho -->
+
+      <div class="cart-total" id="cart-total">Total: 0,00</div>
+      <!-- mostra o valor total; começa em 0 e é atualizado pelo JavaScript -->
+
+      <div class="cart-actions">
+      <!-- div com os botões de ação do carrinho -->
+
+        <button type="button" class="btn btn-outline" id="clearCartBtn">Limpar carrinho</button>
+        <!-- botão que vai limpar todos os produtos do carrinho -->
+
+        <a href="#produtos" class="btn btn-outline" id="continueShoppingBtn">Continuar comprando</a>
+        <!-- link/botão para fechar o modal e voltar à secção de produtos -->
+      </div>
+
+      <!-- FORMULÁRIO DE CHECKOUT -->
+      <form class="checkout-form" id="checkout-form">
+      <!-- <form> agrupa os campos do formulário de finalização de pedido -->
+
+        <div class="form-group">
+        <!-- agrupa label + input para estilos consistentes -->
+
+          <label for="customer-name">Nome completo</label>
+          <!-- <label> descreve o campo; for="customer-name" liga ao input com esse id -->
+
+          <input type="text" id="customer-name" placeholder="Seu nome" required>
+          <!-- campo de texto para o nome -->
+          <!-- placeholder é o texto cinzento que aparece quando está vazio -->
+          <!-- required torna o preenchimento obrigatório antes de submeter -->
+        </div>
+
+        <div class="form-group">
+          <label for="customer-phone">Telefone/WhatsApp</label>
+          <input type="tel" id="customer-phone" placeholder="+258 ..." required>
+          <!-- type="tel" é optimizado para números de telefone em telemóveis -->
+        </div>
+
+        <div class="form-group">
+          <label for="payment-method">Método de Pagamento</label>
+          <select id="payment-method" required>
+          <!-- <select> cria uma lista dropdown de opções -->
+
+            <option value="">Selecione</option>
+            <!-- opção padrão/vazia; value="" significa que não tem valor definido -->
+
+            <option value="Emola">Pagamento via Emola</option>
+            <!-- option com value="Emola" é o valor enviado ao JavaScript ao selecionar -->
+
+            <option value="Mpesa">Pagamento via Mpesa</option>
+            <option value="BCI">Pagamento via Banco (BCI)</option>
+          </select>
+        </div>
+
+        <button type="submit" class="btn btn-success" style="width:100%;">
+        <!-- type="submit" dispara o evento "submit" do formulário ao clicar -->
+          Finalizar Pedido no WhatsApp
+        </button>
+      </form>
+
+      <!-- MENSAGEM DE CARRINHO VAZIO -->
+      <div class="empty-cart" id="empty-cart" style="display:none;">
+      <!-- style="display:none;" esconde este div por padrão -->
+      <!-- o JavaScript muda para display:block quando o carrinho está vazio -->
+
+        <p>Seu carrinho está vazio. <a href="#produtos" id="emptyCartLink">Adicione produtos!</a></p>
+      </div>
+    </div>
+  </div>
+
+  <!-- BOTÃO FLUTUANTE (canto inferior direito) -->
+  <button class="whatsapp-float" type="button" id="floatingCartBtn" aria-label="Abrir carrinho">🛒</button>
+  <!-- botão fixo que fica sempre visível no canto da página para abrir o carrinho -->
+
+  <!-- ================= MODAL DA CATEGORIA (GALERIA) ================= -->
+  <div id="category-modal" class="modal" aria-hidden="true">
+  <!-- modal que mostra todos os produtos de uma categoria -->
+
+    <div class="modal-content">
+      <button class="modal-close" type="button" id="closeCategoryModalBtn" aria-label="Fechar">&times;</button>
+      <!-- botão para fechar o modal da categoria -->
+
+      <div id="category-modal-content"></div>
+      <!-- div vazia preenchida pelo JavaScript com a galeria de produtos da categoria -->
+    </div>
+  </div>
+
+
+  <!-- ================= MODAL DE PESQUISA ================= -->
+<!-- ================= MODAL DE PESQUISA ================= -->
+<div id="search-modal" class="modal" aria-hidden="true">
+  <div class="modal-content search-modal-content">
+    
+    <div class="search-topbar">
+      <div class="search-input-wrap">
+        <span class="search-top-icon">🔍</span>
+        <input
+          type="text"
+          id="search-input"
+          placeholder="Pesquisar produtos, marcas, categorias..."
+          autocomplete="off"
+        >
+        <span class="search-esc">ESC</span>
+      </div>
+
+      <button type="button" class="search-cancel-btn" id="closeSearchBtn">
+        Cancelar
+      </button>
+    </div>
+
+    <!-- FILTROS DE CATEGORIA -->
+    <div class="search-tags-row" id="search-category-filters">
+      <button type="button" class="search-chip active" data-search-category="all">🏷️ Todos</button>
+      <button type="button" class="search-chip" data-search-category="1">⚽ Tênis</button>
+      <button type="button" class="search-chip" data-search-category="2">👕 Camisetas</button>
+      <button type="button" class="search-chip" data-search-category="3">🧤 Luvas</button>
+      <button type="button" class="search-chip" data-search-category="4">🎒 Acessórios</button>
+    </div>
+
+    <!-- ESTADO INICIAL DA PESQUISA -->
+    <div id="search-default-content">
+      
+      <div class="search-section">
+        <div class="search-section-head">
+          <h3>Pesquisas recentes</h3>
+          <button type="button" class="clear-searches-btn" id="clearRecentSearchesBtn">Limpar tudo</button>
+        </div>
+        <div class="search-chip-list" id="recent-searches"></div>
+      </div>
+
+      <div class="search-section">
+        <h3>Pesquisas populares</h3>
+        <div class="search-chip-list" id="popular-searches">
+          <button type="button" class="search-chip soft" data-search-term="Nike Drop">Nike Drop</button>
+          <button type="button" class="search-chip soft" data-search-term="Chuteiras F50">Chuteiras F50</button>
+          <button type="button" class="search-chip soft" data-search-term="Real Madrid">Real Madrid</button>
+          <button type="button" class="search-chip soft" data-search-term="Barcelona">Barcelona</button>
+          <button type="button" class="search-chip soft" data-search-term="Luvas goleiro">Luvas goleiro</button>
+          <button type="button" class="search-chip soft" data-search-term="Adidas">Adidas</button>
+          <button type="button" class="search-chip soft" data-search-term="Bola">Bola</button>
+        </div>
+      </div>
+
+      <div class="search-section">
+        <h3>Explorar categorias</h3>
+        <div class="search-categories-grid">
+          <button type="button" class="search-category-card" data-search-category-card="1">
+            <span>⚽</span>
+            <strong>Tênis & Chuteiras</strong>
+            <small>Ver produtos</small>
+          </button>
+
+          <button type="button" class="search-category-card" data-search-category-card="2">
+            <span>👕</span>
+            <strong>Camisetas</strong>
+            <small>Ver produtos</small>
+          </button>
+
+          <button type="button" class="search-category-card" data-search-category-card="3">
+            <span>🧤</span>
+            <strong>Luvas</strong>
+            <small>Ver produtos</small>
+          </button>
+
+          <button type="button" class="search-category-card" data-search-category-card="4">
+            <span>🎒</span>
+            <strong>Acessórios</strong>
+            <small>Ver produtos</small>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- RESULTADOS -->
+    <div id="search-results-area" style="display:none;">
+      <div id="search-results-info" class="search-results-info"></div>
+      <div id="search-results" class="products-grid"></div>
+    </div>
+
+  </div>
+</div>
+
+  <script src="script.js" defer></script>
+  <!-- carrega o ficheiro JavaScript externo -->
+  <!-- defer significa: "carrega o JS mas só executa depois do HTML estar todo lido" -->
+  <!-- isto evita erros de "elemento não encontrado" quando o JS corre cedo demais -->
+
+</body>
+</html>

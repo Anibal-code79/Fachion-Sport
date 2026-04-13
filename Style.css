@@ -1,0 +1,1980 @@
+/* =========================================================
+   FASHION SPORT - CSS COMPLETO COM COMENTÁRIOS
+   O CSS controla COMO as coisas aparecem visualmente:
+   cores, tamanhos, posições, animações...
+========================================================= */
+
+/* =========================
+   1) VARIÁVEIS E RESET
+========================= */
+
+:root {
+  /* :root é o elemento raiz do documento (o <html>)
+     Aqui definimos "variáveis CSS" — valores reutilizáveis em todo o ficheiro.
+     Em vez de repetir "#0f172a" em 50 sítios, usamos var(--bg) */
+
+  --bg: #0f172a;
+  /* cor do fundo principal — azul muito escuro (quase preto) */
+
+  --bg-soft: #111827;
+  /* versão ligeiramente mais clara do fundo — usada em cards e modais */
+
+  --card: rgba(255, 255, 255, 0.06);
+  /* cor dos cards — branco com apenas 6% de opacidade (quase transparente) */
+
+  --text: #f8fafc;
+  /* cor principal do texto — branco com leve tom azulado */
+
+  --muted: #cbd5e1;
+  /* cor do texto secundário/apagado — cinzento azulado claro */
+
+  --primary: #ff3b5f;
+  /* cor de destaque principal — vermelho/rosa vibrante */
+
+  --primary-dark: #e1284b;
+  /* versão mais escura do vermelho — usada em hover de botões */
+
+  --secondary: #22d3ee;
+  /* cor de destaque secundária — ciano/azul elétrico */
+
+  --white: #ffffff;
+  /* branco puro */
+
+  --border: rgba(255,255,255,0.12);
+  /* cor das bordas — branco com 12% de opacidade (sutil) */
+
+  --shadow: 0 10px 30px rgba(0,0,0,0.25);
+  /* sombra padrão: 10px abaixo, 30px de spread, preto a 25% de opacidade */
+
+  --shadow-lg: 0 20px 50px rgba(0,0,0,0.4);
+  /* sombra grande: mais distante e escura, para destaque maior */
+
+  --radius: 18px;
+  /* arredondamento dos cantos dos cards (border-radius) */
+
+  --transition: all 0.35s ease;
+  /* transição padrão — anima TODAS as propriedades em 0.35 segundos com suavização */
+
+  --focus: 0 0 0 3px rgba(34, 211, 238, 0.35);
+  /* anel de foco acessível em ciano semitransparente para quando se usa teclado */
+}
+
+* {
+  margin: 0;
+  /* remove a margem padrão de TODOS os elementos */
+
+  padding: 0;
+  /* remove o padding padrão de todos os elementos */
+
+  box-sizing: border-box;
+  /* faz com que padding e border sejam incluídos na largura/altura do elemento
+     (sem isto, um elemento de 100px com 10px de padding ficaria com 120px) */
+}
+
+html {
+  scroll-behavior: smooth;
+  /* faz com que os links âncora (#produtos, #sobre...) façam scroll suave */
+}
+
+body {
+  font-family: "Poppins", sans-serif;
+  /* define a fonte principal da página; se Poppins não carregar, usa sans-serif genérica */
+
+  color: var(--text);
+  /* cor do texto padrão — usa a variável --text definida acima */
+
+  line-height: 1.6;
+  /* altura de linha — espaçamento entre linhas de texto (1.6 = 160% do tamanho da fonte) */
+
+  overflow-x: hidden;
+  /* esconde conteúdo que ultrapasse a largura da página (evita scroll horizontal) */
+
+  background:
+    radial-gradient(circle at top left, rgba(34, 211, 238, 0.12), transparent 25%),
+    /* brilho ciano no canto superior esquerdo, vai até 25% do elemento e some */
+
+    radial-gradient(circle at top right, rgba(255, 59, 95, 0.14), transparent 25%),
+    /* brilho vermelho no canto superior direito */
+
+    linear-gradient(135deg, #0b1020, #111827 55%, #0f172a);
+    /* gradiente diagonal do azul-negro para o azul escuro — fundo base da página */
+}
+
+img {
+  display: block;
+  /* remove o espaço extra que imagens têm por baixo quando estão inline */
+
+  max-width: 100%;
+  /* impede que imagens ultrapassem o container onde estão */
+}
+
+a {
+  color: inherit;
+  /* links herdam a cor do elemento pai (em vez do azul padrão do browser) */
+
+  text-decoration: none;
+  /* remove o sublinhado dos links */
+}
+
+button {
+  font-family: inherit;
+  /* botões herdam a fonte da página (por padrão, browsers usam uma fonte diferente) */
+}
+
+.container {
+  width: min(1120px, 92%);
+  /* largura máxima de 1120px, mas nunca mais de 92% da janela (deixa margem lateral) */
+
+  margin: 0 auto;
+  /* centraliza horizontalmente o container */
+}
+
+/* FOCO ACESSÍVEL — para utilizadores que navegam com teclado */
+:where(a, button, input, select) {
+  outline: none;
+  /* remove o contorno padrão feio do browser */
+}
+
+:where(a, button, input, select):focus-visible {
+  box-shadow: var(--focus);
+  /* mostra um anel bonito em ciano quando o elemento é focado com teclado */
+
+  border-radius: 10px;
+  /* arredonda o anel de foco */
+}
+
+
+/* =========================
+   2) HEADER / MENU
+========================= */
+
+header {
+  position: sticky;
+  /* "sticky" = o header fica colado ao topo quando se faz scroll */
+
+  top: 0;
+  /* posição no topo da janela */
+
+  z-index: 1000;
+  /* camada de empilhamento — 1000 garante que fica SOBRE a maioria dos elementos */
+
+  background: rgba(10, 15, 28, 0.75);
+  /* fundo escuro semitransparente — o conteúdo da página aparece levemente atrás */
+
+  backdrop-filter: blur(12px);
+  /* efeito vidro fosco — borra o conteúdo atrás do header */
+
+  border-bottom: 1px solid rgba(255,255,255,0.08);
+  /* linha muito sutil no fundo do header para separar do conteúdo */
+}
+
+.nav {
+  display: flex;
+  /* flex permite alinhar elementos lado a lado */
+
+  align-items: center;
+  /* alinha verticalmente ao centro */
+
+  justify-content: space-between;
+  /* empurra o logo para a esquerda e o menu para a direita */
+
+  gap: 18px;
+  /* espaço mínimo entre os elementos */
+
+  padding: 18px 0;
+  /* espaço vertical interno (em cima e em baixo) */
+}
+
+.logo {
+  font-size: 1.5rem;
+  /* tamanho grande para o logotipo (1rem = 16px por padrão, então 1.5rem = 24px) */
+
+  font-weight: 800;
+  /* peso extra-negrito */
+
+  letter-spacing: 0.5px;
+  /* leve espaçamento entre letras para elegância */
+
+  white-space: nowrap;
+  /* impede que o logotipo quebre em duas linhas */
+}
+
+.logo span {
+  color: var(--primary);
+  /* colore "Sport" com o vermelho de destaque */
+}
+
+.menu {
+  display: flex;
+  flex-wrap: wrap;
+  /* permite que os itens quebrem para nova linha em ecrãs pequenos */
+
+  align-items: center;
+  justify-content: flex-end;
+  /* alinha os links do menu para a direita */
+
+  gap: 20px;
+  /* espaço entre os links */
+}
+
+.menu .link {
+  color: var(--muted);
+  /* links do menu em cinzento (cor apagada) */
+
+  font-weight: 500;
+  /* peso médio */
+
+  transition: var(--transition);
+  /* anima a mudança de cor ao passar o rato */
+}
+
+.menu .link:hover {
+  color: var(--white);
+  /* ao passar o rato, o link fica branco */
+}
+
+
+/* =========================
+   3) BOTÕES
+========================= */
+
+.btn {
+  display: inline-flex;
+  /* flex inline para alinhar ícones e texto dentro do botão */
+
+  align-items: center;
+  justify-content: center;
+
+  padding: 14px 24px;
+  /* espaço interno: 14px cima/baixo, 24px esquerda/direita */
+
+  border-radius: 999px;
+  /* valor absurdamente alto = bordas completamente arredondadas (forma de pílula) */
+
+  font-weight: 600;
+  cursor: pointer;
+  /* muda o cursor para "mão" ao passar por cima */
+
+  border: none;
+  transition: var(--transition);
+  user-select: none;
+  /* impede que o texto do botão seja selecionado com duplo-clique */
+
+  white-space: nowrap;
+  /* impede que o texto do botão quebre em linhas */
+}
+
+.btn-primary {
+  background: linear-gradient(135deg, var(--primary), #ff6b81);
+  /* gradiente do vermelho para rosa claro em diagonal */
+
+  color: var(--white);
+
+  box-shadow: 0 10px 25px rgba(255, 59, 95, 0.3);
+  /* sombra colorida avermelhada abaixo do botão */
+}
+
+.btn-primary:hover {
+  transform: translateY(-3px);
+  /* sobe 3px ao passar o rato — efeito de "levitar" */
+
+  box-shadow: 0 14px 30px rgba(255, 59, 95, 0.45);
+  /* sombra mais intensa no hover */
+}
+
+.btn-outline {
+  border: 1px solid rgba(255,255,255,0.18);
+  /* borda semi-transparente */
+
+  color: var(--white);
+  background: rgba(255,255,255,0.04);
+  /* fundo quase transparente */
+}
+
+.btn-outline:hover {
+  transform: translateY(-3px);
+  background: rgba(255,255,255,0.08);
+  /* fundo ligeiramente mais visível no hover */
+}
+
+.btn-success {
+  background: linear-gradient(135deg, #10b981, #34d399);
+  /* gradiente verde — usado no botão "Finalizar Pedido" */
+
+  color: var(--white);
+}
+
+.btn-success:hover {
+  transform: translateY(-3px);
+}
+
+
+/* =========================
+   4) HERO (BANNER PRINCIPAL)
+========================= */
+
+.hero {
+  padding: 90px 0 70px;
+  /* espaço interno: 90px em cima, 70px em baixo */
+}
+
+.hero-grid {
+  display: grid;
+  grid-template-columns: 1.1fr 1fr;
+  /* 2 colunas: a primeira é ligeiramente mais larga (1.1) que a segunda (1) */
+
+  gap: 40px;
+  /* espaço entre as colunas */
+
+  align-items: center;
+  /* alinha verticalmente ao centro */
+}
+
+.hero-text h1 {
+  font-size: clamp(2.1rem, 4.7vw, 4.2rem);
+  /* clamp(mínimo, preferido, máximo) — o título escala com o tamanho da janela
+     nunca menor que 2.1rem, nunca maior que 4.2rem */
+
+  line-height: 1.08;
+  /* linhas muito próximas para títulos grandes — visual compacto e impactante */
+
+  margin-bottom: 18px;
+  font-weight: 800;
+}
+
+.hero-text h1 span {
+  color: var(--primary);
+  /* colore "Futebooll" com o vermelho de destaque */
+}
+
+.hero-text p {
+  color: var(--muted);
+  max-width: 620px;
+  /* limita a largura para melhor legibilidade */
+
+  margin-bottom: 28px;
+  font-size: 1.05rem;
+}
+
+.hero-actions {
+  display: flex;
+  gap: 14px;
+  flex-wrap: wrap;
+  margin-bottom: 34px;
+}
+
+.hero-info {
+  display: flex;
+  gap: 18px;
+  flex-wrap: wrap;
+}
+
+.info-box {
+  background: rgba(255,255,255,0.05);
+  border: 1px solid rgba(255,255,255,0.08);
+  padding: 14px 18px;
+  border-radius: 14px;
+  min-width: 140px;
+  /* largura mínima para evitar que fique muito pequeno */
+}
+
+.info-box strong {
+  display: block;
+  /* força o strong a ocupar toda a linha (fica em cima do span) */
+
+  font-size: 1.3rem;
+}
+
+.info-box span {
+  color: var(--muted);
+  font-size: 1.05remm;
+}
+
+.hero-image {
+  position: relative;
+  /* necessário para posicionar elementos filhos absolutamente dentro deste */
+}
+
+.image-card {
+  border-radius: 28px;
+  overflow: hidden;
+  /* esconde as partes da imagem que ultrapassam o arredondamento */
+
+  box-shadow: var(--shadow);
+  border: 1px solid rgba(255,255,255,0.12);
+}
+
+.image-card img {
+  width: 100%;
+  height: 620px;
+  object-fit: cover;
+  /* a imagem cobre toda a área sem deformar (corta os lados se necessário) */
+
+  transition: transform 0.7s ease;
+  /* anima o zoom da imagem suavemente em 0.7 segundos */
+}
+
+.image-card:hover img {
+  transform: scale(1.05);
+  /* zoom de 5% ao passar o rato sobre o card */
+}
+
+
+/* =========================
+   5) SEÇÕES / TÍTULOS
+========================= */
+
+.section {
+  padding: 80px 0;
+  /* espaço generoso acima e abaixo de cada secção */
+}
+
+.section-title {
+  text-align: center;
+  margin-bottom: 44px;
+}
+
+.section-title span {
+  color: var(--secondary);
+  /* o rótulo acima do título fica em ciano */
+
+  font-weight: 700;
+  display: inline-block;
+  /* inline-block permite aplicar margin-bottom */
+
+  margin-bottom: 10px;
+}
+
+.section-title h2 {
+  font-size: clamp(2rem, 4vw, 3rem);
+  /* escala responsivamente entre 2rem e 3rem */
+
+  margin-bottom: 10px;
+}
+
+.section-title p {
+  color: var(--muted);
+  max-width: 800px;
+  margin: 0 auto;
+  /* centraliza o parágrafo */
+}
+
+
+/* =========================
+   6) PRODUTOS (4 colunas)
+========================= */
+
+.products-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  /* 4 colunas iguais (1fr = 1 fração do espaço disponível) */
+
+  gap: 24px;
+}
+
+.product-card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  overflow: hidden;
+  box-shadow: var(--shadow);
+  transition: var(--transition);
+}
+
+.product-card:hover {
+  transform: translateY(-10px);
+  /* o card sobe 10px ao passar o rato — efeito "flutuar" */
+
+  border-color: rgba(255,255,255,0.22);
+  /* borda fica mais visível no hover */
+}
+
+.product-image {
+  position: relative;
+  /* necessário para o overlay ficar dentro do card */
+
+  overflow: hidden;
+  height: 260px;
+}
+
+.product-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.6s ease, filter 0.4s ease;
+  /* anima zoom E escurecimento da imagem separadamente */
+}
+
+.product-card:hover .product-image img {
+  transform: scale(1.12);
+  /* zoom maior que o hero: 12% */
+
+  filter: brightness(0.72);
+  /* escurece a imagem a 72% para o overlay ficar legível */
+}
+
+.product-overlay {
+  position: absolute;
+  /* sobrepõe-se à imagem */
+
+  inset: 0;
+  /* equivale a top:0; right:0; bottom:0; left:0 — cobre toda a área */
+
+  display: grid;
+  place-items: center;
+  /* centra o botão dentro do overlay */
+
+  background: linear-gradient(to top, rgba(0,0,0,0.55), rgba(0,0,0,0.15));
+  /* gradiente do fundo para o topo — mais escuro em baixo, quase transparente em cima */
+
+  opacity: 0;
+  /* começa invisível */
+
+  transition: var(--transition);
+}
+
+.product-card:hover .product-overlay {
+  opacity: 1;
+  /* fica visível quando o card está em hover */
+}
+
+.overlay-btn {
+  padding: 12px 20px;
+  border-radius: 999px;
+  background: rgba(255,255,255,0.92);
+  /* fundo quase branco sólido */
+
+  color: #111827;
+  /* texto escuro para contraste com o fundo claro */
+
+  font-weight: 800;
+  border: none;
+  cursor: pointer;
+
+  transform: translateY(12px);
+  /* começa ligeiramente abaixo da posição final */
+
+  transition: var(--transition);
+}
+
+.product-card:hover .overlay-btn {
+  transform: translateY(0);
+  /* sobe para a posição correta quando em hover — efeito de "entrar" */
+}
+
+.product-content {
+  padding: 18px 18px 20px;
+}
+
+.product-content .category {
+  color: var(--secondary);
+  font-weight: 700;
+  font-size: 0.92rem;
+  margin-bottom: 6px;
+}
+
+.product-content h3 {
+  font-size: 1.18rem;
+  margin-bottom: 8px;
+}
+
+.product-content p {
+  color: var(--muted);
+  font-size: 0.96rem;
+  margin-bottom: 14px;
+}
+
+.product-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  /* preço à esquerda, botão à direita */
+
+  gap: 12px;
+}
+
+.price {
+  font-weight: 800;
+}
+
+.mini-link {
+  border: none;
+  background: transparent;
+  color: var(--primary);
+  /* texto vermelho sem fundo — parece um link mas é um botão */
+
+  font-weight: 700;
+  cursor: pointer;
+  transition: var(--transition);
+}
+
+.mini-link:hover {
+  letter-spacing: 0.4px;
+  /* ao passar o rato, as letras afastam-se ligeiramente */
+}
+
+
+/* =========================
+   7) SOBRE
+========================= */
+
+.about-box {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  /* 2 colunas iguais: imagem e texto */
+
+  gap: 30px;
+  align-items: center;
+  background: rgba(255,255,255,0.04);
+  border: 1px solid var(--border);
+  border-radius: 24px;
+  overflow: hidden;
+  box-shadow: var(--shadow);
+}
+
+.about-image img {
+  width: 100%;
+  height: 100%;
+  min-height: 420px;
+  /* altura mínima para a imagem não ficar muito pequena */
+
+  object-fit: cover;
+}
+
+.about-content {
+  padding: 40px;
+  /* espaço generoso à volta do texto */
+}
+
+.about-content h3 {
+  font-size: 2rem;
+  margin-bottom: 14px;
+}
+
+.about-content p {
+  color: var(--muted);
+  margin-bottom: 14px;
+}
+
+.features {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  /* 2 colunas iguais para as features */
+
+  gap: 16px;
+  margin-top: 18px;
+}
+
+.feature {
+  background: rgba(255,255,255,0.05);
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 14px;
+  padding: 16px;
+}
+
+.feature strong {
+  display: block;
+  margin-bottom: 6px;
+}
+
+.feature span {
+  color: var(--muted);
+  font-size: 0.95rem;
+}
+
+
+/* =========================
+   8) CONTACTO (4 colunas)
+========================= */
+
+.contact-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  /* 4 colunas iguais para os cards de contacto */
+
+  gap: 24px;
+}
+
+.contact-card {
+  display: block;
+  /* necessário para <a> ter layout de bloco (ocupar toda a célula) */
+
+  background: rgba(255,255,255,0.05);
+  border: 1px solid var(--border);
+  border-radius: 18px;
+  padding: 26px;
+  text-align: center;
+  transition: var(--transition);
+}
+
+.contact-card:hover {
+  transform: translateY(-8px);
+  border-color: rgba(255,255,255,0.20);
+}
+
+.contact-card h4 {
+  margin-bottom: 10px;
+  font-size: 1.15rem;
+}
+
+.contact-card p {
+  color: var(--muted);
+  font-size: 0.96rem;
+}
+
+
+/* =========================
+   9) FOOTER (RODAPÉ)
+========================= */
+
+footer {
+  padding: 26px 0 40px;
+  border-top: 1px solid rgba(255,255,255,0.08);
+  margin-top: 30px;
+}
+
+.footer-content {
+  text-align: center;
+  color: var(--muted);
+  font-size: 0.95rem;
+}
+
+
+/* =========================
+   10) REVEAL (ANIMAÇÃO DE ENTRADA)
+   Os elementos com .reveal ficam invisíveis e deslocados para baixo.
+   Quando o JavaScript adiciona .active, animam para a posição correta.
+========================= */
+
+.reveal {
+  opacity: 0;
+  /* começa invisível */
+
+  transform: translateY(30px);
+  /* começa 30px abaixo da posição final */
+
+  transition: 0.8s ease;
+  /* anima em 0.8 segundos com suavização */
+}
+
+.reveal.active {
+  opacity: 1;
+  /* fica visível */
+
+  transform: translateY(0);
+  /* volta à posição correta */
+}
+
+
+/* =========================
+   11) MODAIS
+   pointer-events: none evita que o modal invisível bloqueie cliques na página
+========================= */
+
+.modal {
+  position: fixed;
+  /* fica fixo na janela, independente do scroll */
+
+  inset: 0;
+  /* cobre toda a janela */
+
+  background: rgba(0,0,0,0.85);
+  /* fundo escuro semitransparente atrás do modal */
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  /* centra o conteúdo do modal vertical e horizontalmente */
+
+  z-index: 2000;
+  /* acima do header (1000) e do botão flutuante (1500) */
+
+  opacity: 0;
+  /* começa invisível */
+
+  visibility: hidden;
+  /* esconde completamente (opacity:0 sozinho ainda ocupa espaço no DOM acessível) */
+
+  pointer-events: none;
+  /* IMPORTANTE: sem isto, o modal invisível bloquearia todos os cliques da página */
+
+  transition: var(--transition);
+  padding: 18px;
+}
+
+.modal.active {
+  opacity: 1;
+  /* fica visível */
+
+  visibility: visible;
+  pointer-events: auto;
+  /* reativa os cliques */
+}
+
+.modal-content {
+  background: var(--bg-soft);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  width: 100%;
+  max-width: 900px;
+  /* nunca mais largo que 900px */
+
+  max-height: 90vh;
+  /* nunca mais alto que 90% da altura da janela */
+
+  overflow-y: auto;
+  /* se o conteúdo for muito longo, aparece scroll vertical */
+
+  position: relative;
+  /* para posicionar o botão de fechar absolutamente */
+
+  box-shadow: var(--shadow-lg);
+  padding: 26px;
+}
+
+.modal-close {
+  position: absolute;
+  top: 12px;
+  right: 14px;
+  /* posicionado no canto superior direito do modal */
+
+  width: 46px;
+  height: 46px;
+  border-radius: 12px;
+  border: none;
+  background: rgba(255,255,255,0.06);
+  color: var(--muted);
+  font-size: 2rem;
+  cursor: pointer;
+  transition: var(--transition);
+  display: grid;
+  place-items: center;
+  /* centra o × dentro do botão */
+}
+
+.modal-close:hover {
+  color: var(--white);
+  transform: rotate(90deg);
+  /* roda 90° ao passar o rato — efeito visual divertido */
+
+  background: rgba(255,255,255,0.10);
+}
+
+
+/* =========================
+   12) MODAL DO PRODUTO
+========================= */
+
+.product-detail {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  /* imagem à esquerda, detalhes à direita */
+
+  gap: 28px;
+  padding-top: 16px;
+}
+
+.gallery-main img {
+  width: 100%;
+  height: 480px;
+  object-fit: cover;
+  border-radius: 16px;
+  border: 1px solid rgba(255,255,255,0.08);
+  box-shadow: var(--shadow);
+}
+
+.gallery-thumbs {
+  display: flex;
+  gap: 10px;
+  margin-top: 14px;
+  flex-wrap: wrap;
+}
+
+.thumb {
+  width: 78px;
+  height: 78px;
+  object-fit: cover;
+  border-radius: 12px;
+  cursor: pointer;
+  border: 2px solid transparent;
+  /* borda transparente por padrão para não mudar o tamanho ao ativar */
+
+  opacity: 0.92;
+  transition: var(--transition);
+}
+
+.thumb:hover {
+  opacity: 1;
+}
+
+.thumb.active {
+  border-color: var(--primary);
+  /* miniatura selecionada ganha borda vermelha */
+
+  opacity: 1;
+}
+
+.detail-content h2 {
+  font-size: 2rem;
+  margin-bottom: 10px;
+  line-height: 1.2;
+}
+
+.detail-price {
+  color: var(--primary);
+  font-size: 1.8rem;
+  font-weight: 900;
+  margin-bottom: 12px;
+}
+
+.detail-desc {
+  color: var(--muted);
+  margin-bottom: 18px;
+}
+
+.add-to-cart {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+.qty-select {
+  display: inline-flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 10px 14px;
+  border-radius: 999px;
+  border: 1px solid var(--border);
+  background: rgba(255,255,255,0.05);
+  min-width: 140px;
+}
+
+.qty-btn {
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  /* círculo perfeito */
+
+  border: none;
+  cursor: pointer;
+  background: var(--primary);
+  color: var(--white);
+  font-weight: 900;
+  transition: var(--transition);
+}
+
+.qty-btn:hover {
+  background: var(--primary-dark);
+}
+
+
+/* =========================
+   13) MODAL DA CATEGORIA (GALERIA)
+========================= */
+
+.category-head {
+  margin-top: 10px;
+  margin-bottom: 18px;
+}
+
+.category-head h2 {
+  font-size: 2rem;
+  margin-bottom: 8px;
+}
+
+.category-head p {
+  color: var(--muted);
+}
+
+.category-items-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  /* 3 colunas para os produtos da galeria da categoria */
+
+  gap: 16px;
+}
+
+.category-item {
+  background: rgba(255,255,255,0.05);
+  border: 1px solid rgba(255,255,255,0.10);
+  border-radius: 16px;
+  overflow: hidden;
+  transition: var(--transition);
+}
+
+.category-item:hover {
+  transform: translateY(-6px);
+  border-color: rgba(255,255,255,0.18);
+}
+
+.category-item img {
+  width: 100%;
+  height: 180px;
+  object-fit: cover;
+}
+
+.category-item-body {
+  padding: 14px;
+}
+
+.category-item-body h4 {
+  font-size: 1.05rem;
+  margin-bottom: 6px;
+}
+
+.category-item-body p {
+  color: var(--muted);
+  margin-bottom: 10px;
+}
+
+.category-item-actions {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+
+/* =========================
+   14) MODAL DO CARRINHO
+========================= */
+
+.cart-title {
+  text-align: center;
+  margin: 4px 0 18px;
+  font-size: 1.9rem;
+}
+
+.cart-items {
+  max-height: 360px;
+  overflow-y: auto;
+  /* scroll se houver muitos produtos */
+
+  padding-right: 6px;
+  /* pequeno espaço para a barra de scroll não sobrepor o conteúdo */
+}
+
+.cart-item {
+  display: flex;
+  gap: 16px;
+  align-items: center;
+  padding: 16px 0;
+  border-bottom: 1px solid var(--border);
+  /* linha separadora entre cada item */
+}
+
+.cart-item img {
+  width: 84px;
+  height: 84px;
+  object-fit: cover;
+  border-radius: 12px;
+  border: 1px solid rgba(255,255,255,0.08);
+}
+
+.cart-info h4 {
+  margin-bottom: 4px;
+}
+
+.cart-info p {
+  color: var(--muted);
+}
+
+.cart-qty {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 12px;
+  border-radius: 999px;
+  border: 1px solid rgba(255,255,255,0.10);
+  background: rgba(255,255,255,0.05);
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.cart-total {
+  text-align: right;
+  font-weight: 900;
+  color: var(--primary);
+  margin: 16px 0 10px;
+  font-size: 1.5rem;
+}
+
+.cart-actions {
+  display: flex;
+  gap: 12px;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  margin: 10px 0;
+}
+
+.checkout-form {
+  display: grid;
+  gap: 14px;
+  /* espaço entre cada campo do formulário */
+
+  margin-top: 12px;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  /* label em cima, input em baixo */
+}
+
+.form-group label {
+  margin-bottom: 8px;
+  font-weight: 600;
+}
+
+.form-group input, .form-group select {
+  padding: 14px;
+  border-radius: 12px;
+  border: 1px solid var(--border);
+  background: rgba(255,255,255,0.05);
+  color: var(--white);
+  /* os inputs têm o mesmo visual da página — fundo escuro, texto branco */
+}
+
+.form-group input::placeholder {
+  color: rgba(203,213,225,0.7);
+  /* placeholder em cinzento semitransparente */
+}
+
+.empty-cart {
+  text-align: center;
+  padding: 30px 10px;
+  color: var(--muted);
+}
+
+
+/* =========================
+   15) BOTÃO FLUTUANTE (canto inferior direito)
+========================= */
+
+.whatsapp-float {
+  position: fixed;
+  /* fica sempre no mesmo sítio na janela */
+
+  right: 24px;
+  bottom: 24px;
+  /* 24px do canto inferior direito */
+
+  width: 58px;
+  height: 58px;
+  border-radius: 50%;
+  /* círculo perfeito */
+
+  border: none;
+  cursor: pointer;
+  background: #25d366;
+  /* verde do WhatsApp */
+
+  box-shadow: var(--shadow-lg);
+  font-size: 1.7rem;
+  color: #0b1020;
+  /* emoji/ícone escuro sobre fundo verde */
+
+  transition: var(--transition);
+  z-index: 1500;
+  /* acima da maioria dos elementos mas abaixo dos modais (2000) */
+}
+
+.whatsapp-float:hover {
+  transform: scale(1.07);
+  /* cresce 7% ao passar o rato */
+}
+
+
+/* =========================
+   16) RESPONSIVO (Media Queries)
+   Media queries aplicam estilos apenas em determinadas larguras de janela
+========================= */
+
+@media (max-width: 992px) {
+  /* Para janelas até 992px de largura (tablets) */
+
+  .hero-grid, .about-box {
+    grid-template-columns: 1fr;
+    /* passa de 2 colunas para 1 — conteúdo fica em pilha vertical */
+  }
+
+  .products-grid {
+    grid-template-columns: repeat(2, 1fr);
+    /* produtos: de 4 colunas para 2 */
+  }
+
+  .contact-grid {
+    grid-template-columns: repeat(2, 1fr);
+    /* contactos: de 4 colunas para 2 */
+  }
+
+  .image-card img {
+    height: 520px;
+    /* imagem hero um pouco mais baixa */
+  }
+
+  .category-items-grid {
+    grid-template-columns: repeat(2, 1fr);
+    /* galeria de categoria: de 3 para 2 colunas */
+  }
+}
+
+@media (max-width: 768px) {
+  /* Para janelas até 768px de largura (telemóveis) */
+
+  .nav {
+    flex-direction: column;
+    /* header passa a empilhar logo e menu verticalmente */
+
+    align-items: flex-start;
+  }
+
+  .menu {
+    justify-content: flex-start;
+    gap: 14px;
+  }
+
+  .hero {
+    padding-top: 60px;
+    /* menos espaço no topo em telemóvel */
+  }
+
+  .hero-actions {
+    flex-direction: column;
+    align-items: flex-start;
+    /* botões do hero em coluna em vez de linha */
+  }
+
+  .btn {
+    width: 100%;
+    max-width: 340px;
+    /* botões a largura total em telemóvel */
+  }
+
+  .products-grid, .contact-grid, .features {
+    grid-template-columns: 1fr;
+    /* tudo passa a 1 coluna em telemóvel */
+  }
+
+  .product-detail {
+    grid-template-columns: 1fr;
+    /* modal de produto: imagem e detalhes em coluna */
+  }
+
+  .gallery-main img {
+    height: 340px;
+    /* imagem do produto mais baixa em telemóvel */
+  }
+
+  .cart-item {
+    flex-direction: column;
+    text-align: center;
+    /* item do carrinho em coluna em telemóvel */
+  }
+
+  .cart-total {
+    text-align: center;
+  }
+
+  .category-items-grid {
+    grid-template-columns: 1fr;
+    /* galeria: 1 coluna em telemóvel */
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  /* Para utilizadores que preferem menos animações (configuração do sistema operativo) */
+
+  html {
+    scroll-behavior: auto;
+    /* desativa scroll suave */
+  }
+
+  .reveal {
+    transition: none;
+    transform: none;
+    opacity: 1;
+    /* elementos reveal ficam sempre visíveis, sem animação */
+  }
+
+  .btn, .image-card img, .product-image img {
+    transition: none;
+    /* desativa todas as transições de botões e imagens */
+  }
+}
+
+
+/* =========================
+   CONTACTO COM ÍCONES (extensão dos estilos base)
+========================= */
+
+.contact-card {
+  position: relative;
+  /* para o efeito ::before de brilho funcionar */
+
+  overflow: hidden;
+  padding-top: 24px;
+}
+
+.contact-icon {
+  width: 30px;
+  height: 30px;
+  margin: 0 auto 12px;
+  display: grid;
+  place-items: center;
+  border-radius: 8px;
+  background: rgba(255,255,255,0.06);
+  border: 1px solid rgba(255,255,255,0.10);
+  box-shadow: 0 8px 25px rgba(0,0,0,0.20);
+  color: var(--white);
+}
+
+.contact-icon svg {
+  width: 18px;
+  height: 18px;
+}
+
+.contact-card h4 {
+  margin-bottom: 8px;
+}
+
+.contact-card p {
+  margin-bottom: 13px;
+}
+
+.contact-cta {
+  display: inline-block;
+  font-weight: 700;
+  color: var(--white);
+  opacity: 0.9;
+  border-bottom: 1px solid rgba(255,255,255,0.18);
+  /* sublinhado sutil como CTA */
+
+  padding-bottom: 3px;
+}
+
+.contact-card::before {
+  /* pseudo-elemento ::before cria um elemento "fantasma" antes do conteúdo */
+
+  content: "";
+  /* obrigatório para pseudo-elementos aparecerem */
+
+  position: absolute;
+  inset: -2px;
+  /* ligeiramente maior que o card para cobrir bordas */
+
+  background: radial-gradient(circle at top left, rgba(34,211,238,0.25), transparent 45%),
+              radial-gradient(circle at bottom right, rgba(255,59,95,0.22), transparent 45%);
+  /* brilho colorido nos cantos opostos */
+
+  opacity: 0;
+  /* invisível por padrão */
+
+  transition: var(--transition);
+}
+
+.contact-card:hover::before {
+  opacity: 1;
+  /* brilho aparece ao passar o rato sobre o card */
+}
+
+.contact-card > * {
+  position: relative;
+  z-index: 1;
+  /* garante que o conteúdo fica ACIMA do ::before */
+}
+
+/* Cores específicas por rede social */
+.contact-whatsapp .contact-icon { color: #22c55e; }  /* verde WhatsApp */
+.contact-instagram .contact-icon { color: #f472b6; } /* rosa Instagram */
+.contact-facebook .contact-icon { color: #60a5fa; }  /* azul Facebook */
+.contact-email .contact-icon { color: #22d3ee; }     /* ciano para email */
+
+
+/* =========================
+   BOTÃO "VOLTAR AO TOPO"
+========================= */
+
+.to-top {
+  position: fixed;
+  right: 24px;
+  bottom: 96px;
+  /* acima do botão do carrinho (que está a 24px do fundo) */
+
+  width: 46px;
+  height: 46px;
+  border-radius: 14px;
+  border: 1px solid rgba(255,255,255,0.18);
+  background: rgba(255,255,255,0.06);
+  color: var(--white);
+  cursor: pointer;
+  box-shadow: var(--shadow);
+
+  opacity: 0;
+  transform: translateY(10px);
+  /* começa invisível e ligeiramente abaixo */
+
+  pointer-events: none;
+  /* não recebe cliques quando invisível */
+
+  transition: var(--transition);
+  z-index: 1500;
+}
+
+.to-top.show {
+  opacity: 1;
+  transform: translateY(0);
+  pointer-events: auto;
+  /* ativa quando a classe .show é adicionada pelo JavaScript */
+}
+/* =========================
+   PRODUTOS EM DESTAQUE
+========================= */
+
+/* =========================
+   GRELHA DOS PRODUTOS EM DESTAQUE
+========================= */
+
+.featured-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 24px;
+}
+
+.featured-card .product-image {
+  height: 260px;
+}
+
+.featured-card .product-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.featured-card .product-content {
+  padding: 18px;
+}
+
+.featured-card h3 {
+  font-size: 1.2rem;
+  line-height: 1.3;
+  margin-bottom: 10px;
+}
+
+.featured-card p {
+  font-size: 0.95rem;
+  line-height: 1.5;
+}
+
+.featured-card .product-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+@media (max-width: 992px) {
+  .featured-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 768px) {
+  .featured-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .featured-card .product-image {
+    height: 220px;
+  }
+
+  .featured-card h3 {
+    font-size: 1.1rem;
+  }
+
+  .featured-card p {
+    font-size: 0.92rem;
+  }
+
+  .featured-card .product-footer {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .featured-card .mini-link {
+    width: 100%;
+    text-align: center;
+  }
+
+  .featured-badge {
+    font-size: 0.78rem;
+    padding: 6px 12px;
+  }
+}
+.featured-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 24px;
+}
+
+.featured-card {
+  position: relative;
+  background: linear-gradient(180deg, rgba(255,255,255,0.08), rgba(255,255,255,0.04));
+  border: 1px solid rgba(34, 211, 238, 0.25);
+  box-shadow:
+    0 15px 35px rgba(0,0,0,0.30),
+    0 0 0 1px rgba(255, 255, 255, 0.03),
+    0 0 25px rgba(34, 211, 238, 0.08);
+  overflow: hidden;
+}
+
+.featured-card::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(circle at top left, rgba(255, 59, 95, 0.16), transparent 35%),
+    radial-gradient(circle at bottom right, rgba(34, 211, 238, 0.14), transparent 35%);
+  opacity: 1;
+  pointer-events: none;
+}
+
+.featured-card:hover {
+  transform: translateY(-12px) scale(1.01);
+  border-color: rgba(34, 211, 238, 0.55);
+  box-shadow:
+    0 20px 45px rgba(0,0,0,0.35),
+    0 0 30px rgba(34, 211, 238, 0.12);
+}
+
+.featured-card .product-content,
+.featured-card .product-image {
+  position: relative;
+  z-index: 1;
+}
+
+.featured-badge {
+  display: inline-block;
+  padding: 8px 14px;
+  margin-bottom: 12px;
+  border-radius: 999px;
+  background: linear-gradient(135deg, #facc15, #f59e0b);
+  color: #111827;
+  font-size: 0.88rem;
+  font-weight: 800;
+  box-shadow: 0 8px 18px rgba(245, 158, 11, 0.28);
+}
+
+.featured-card h3 {
+  font-size: 1.3rem;
+  color: #ffffff;
+}
+
+.featured-card .price {
+  color: #22d3ee;
+  font-size: 1.05rem;
+}
+
+.featured-card .mini-link {
+  color: #ffffff;
+  background: rgba(255,255,255,0.08);
+  padding: 8px 14px;
+  border-radius: 999px;
+}
+
+.featured-card .mini-link:hover {
+  background: rgba(255,255,255,0.14);
+  letter-spacing: 0.3px;
+}
+.featured-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 28px;
+}
+.featured-card .product-image {
+  height: 260px;
+}
+
+.featured-card .product-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.featured-card .product-content {
+  padding: 18px;
+}
+
+.featured-card h3 {
+  font-size: 1.2rem;
+  line-height: 1.3;
+  margin-bottom: 10px;
+}
+
+.featured-card p {
+  font-size: 0.95rem;
+  line-height: 1.5;
+}
+@media (max-width: 768px) {
+  .featured-card h3 {
+    font-size: 1.1rem;
+  }
+
+  .featured-card p {
+    font-size: 0.92rem;
+  }
+}
+.featured-card .product-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+.featured-badge {
+  display: inline-block;
+  padding: 8px 14px;
+  margin-bottom: 12px;
+  border-radius: 999px;
+  background: linear-gradient(135deg, #facc15, #f59e0b);
+  color: #111827;
+  font-size: 0.85rem;
+  font-weight: 800;
+}
+
+/* =========================
+   PESQUISA DE PRODUTOS
+========================= */
+
+.search-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 12px 18px;
+  border-radius: 999px;
+  border: 1px solid rgba(255,255,255,0.18);
+  background: rgba(255,255,255,0.05);
+  color: var(--white);
+  font-weight: 600;
+  cursor: pointer;
+  transition: var(--transition);
+}
+
+.search-btn:hover {
+  transform: translateY(-2px);
+  background: rgba(255,255,255,0.10);
+}
+
+.search-modal-content {
+  max-width: 1000px;
+}
+
+.search-box {
+  padding-top: 16px;
+}
+
+.search-box h2 {
+  font-size: 2rem;
+  margin-bottom: 8px;
+  text-align: center;
+}
+
+.search-box p {
+  color: var(--muted);
+  text-align: center;
+  margin-bottom: 22px;
+}
+
+#search-input {
+  width: 100%;
+  padding: 16px 18px;
+  border-radius: 14px;
+  border: 1px solid var(--border);
+  background: rgba(255,255,255,0.05);
+  color: var(--white);
+  font-size: 1rem;
+  margin-bottom: 22px;
+}
+
+#search-input::placeholder {
+  color: rgba(203,213,225,0.7);
+}
+
+.search-results-info {
+  margin-bottom: 18px;
+  color: var(--muted);
+  text-align: center;
+}
+
+/* =========================
+   NOVO MODAL DE PESQUISA
+========================= */
+
+.search-modal-content {
+  max-width: 1050px;
+  padding: 20px;
+}
+
+.search-topbar {
+  display: flex;
+  gap: 14px;
+  align-items: center;
+  margin-bottom: 18px;
+}
+
+.search-input-wrap {
+  flex: 1;
+  position: relative;
+  display: flex;
+  align-items: center;
+  background: rgba(255,255,255,0.05);
+  border: 1px solid rgba(255,255,255,0.10);
+  border-radius: 18px;
+  padding: 0 16px;
+  min-height: 58px;
+}
+
+.search-top-icon {
+  font-size: 1.1rem;
+  margin-right: 10px;
+  opacity: 0.75;
+}
+
+#search-input {
+  flex: 1;
+  border: none;
+  background: transparent;
+  color: var(--white);
+  font-size: 1.05rem;
+  outline: none;
+}
+
+#search-input::placeholder {
+  color: rgba(203,213,225,0.65);
+}
+
+.search-esc {
+  color: var(--muted);
+  font-size: 0.88rem;
+  font-weight: 700;
+  margin-left: 10px;
+}
+
+.search-cancel-btn {
+  border: 1px solid rgba(255,255,255,0.12);
+  background: rgba(255,255,255,0.05);
+  color: var(--white);
+  border-radius: 16px;
+  padding: 16px 20px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: var(--transition);
+}
+
+.search-cancel-btn:hover {
+  background: rgba(255,255,255,0.09);
+}
+
+.search-tags-row,
+.search-chip-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.search-tags-row {
+  margin-bottom: 28px;
+}
+
+.search-chip {
+  border: 1px solid rgba(255,255,255,0.12);
+  background: rgba(255,255,255,0.05);
+  color: var(--text);
+  padding: 12px 18px;
+  border-radius: 999px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: var(--transition);
+}
+
+.search-chip:hover {
+  background: rgba(255,255,255,0.10);
+}
+
+.search-chip.active {
+  background: rgba(255, 59, 95, 0.15);
+  border-color: rgba(255, 59, 95, 0.45);
+  color: #fff;
+}
+
+.search-chip.soft {
+  background: rgba(255,255,255,0.04);
+}
+
+.search-section {
+  padding: 20px 0;
+  border-top: 1px solid rgba(255,255,255,0.08);
+}
+
+.search-section:first-child {
+  border-top: none;
+}
+
+.search-section h3 {
+  font-size: 1.3rem;
+  margin-bottom: 18px;
+}
+
+.search-section-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 18px;
+}
+
+.clear-searches-btn {
+  border: none;
+  background: transparent;
+  color: var(--primary);
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.search-categories-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 18px;
+}
+
+.search-category-card {
+  text-align: left;
+  padding: 20px;
+  border-radius: 18px;
+  border: 1px solid rgba(255,255,255,0.10);
+  background: rgba(255,255,255,0.04);
+  color: var(--white);
+  cursor: pointer;
+  transition: var(--transition);
+}
+
+.search-category-card:hover {
+  transform: translateY(-4px);
+  border-color: rgba(255,255,255,0.18);
+  background: rgba(255,255,255,0.07);
+}
+
+.search-category-card span {
+  display: block;
+  font-size: 1.5rem;
+  margin-bottom: 12px;
+}
+
+.search-category-card strong {
+  display: block;
+  font-size: 1.05rem;
+  margin-bottom: 6px;
+}
+
+.search-category-card small {
+  color: var(--muted);
+}
+
+.search-results-info {
+  margin: 8px 0 20px;
+  color: var(--muted);
+  text-align: left;
+  font-weight: 500;
+}
+
+/* =========================
+   GRELHA DOS PRODUTOS EM DESTAQUE
+========================= */
+
+.featured-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 24px;
+}
+
+/* =========================
+   RESPONSIVO DO FOOTER
+========================= */
+@media (max-width: 992px) {
+  .featured-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 768px) {
+  .featured-card .product-image {
+    height: 220px;
+  }
+  .featured-grid {
+    grid-template-columns: 1fr;
+  }
+  .featured-card .product-footer {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  .featured-card .mini-link {
+    width: 100%;
+    text-align: center;
+  }
+   .featured-badge {
+    font-size: 0.78rem;
+    padding: 6px 12px;
+  }
+}
+@media (max-width: 768px) {
+  .search-topbar {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .search-cancel-btn {
+    width: 100%;
+  }
+
+  .search-categories-grid {
+    grid-template-columns: 1fr;
+  }
+  
+}
+
+@media (max-width: 992px) {
+  .footer-grid {
+    grid-template-columns: 1fr 1fr;
+    /* footer: de 3 para 2 colunas em tablet */
+  }
+}
+
+@media (max-width: 768px) {
+  .footer-grid {
+    grid-template-columns: 1fr;
+    /* footer: 1 coluna em telemóvel */
+  }
+}
+@media (max-width: 768px) {
+  .featured-grid {
+    display: flex;
+    overflow-x: auto;
+    gap: 16px;
+    scroll-snap-type: x mandatory;
+    padding-bottom: 10px;
+  }
+
+  .featured-grid .featured-card {
+    min-width: 260px;
+    flex: 0 0 auto;
+    scroll-snap-align: start;
+  }
+}
+@media (max-width: 768px) {
+  .featured-grid {
+    grid-template-columns: 1fr;
+  }
+}
