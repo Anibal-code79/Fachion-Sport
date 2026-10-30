@@ -1,26 +1,7 @@
-/* =========================================================
-   FASHION SPORT - JAVASCRIPT COMPLETO COM COMENTÁRIOS
-   O JavaScript controla o COMPORTAMENTO da página:
-   o que acontece quando o utilizador clica, scroll, preenche formulários...
-========================================================= */
 
-/* --- CAPTURA DE ERROS GLOBAL ---
-   Se algum erro JS acontecer, ele aparece na consola do browser (F12)
-   em vez de falhar silenciosamente */
 window.addEventListener("error", (e) => {
-  // "error" é o evento que dispara quando ocorre um erro não tratado
-  // e.message = mensagem do erro
-  // e.filename = ficheiro onde ocorreu
-  // e.lineno = número da linha
   console.log("ERRO JS:", e.message, "em", e.filename, "linha", e.lineno);
 });
-
-
-/* =========================
-   1) CONFIGURAÇÃO CENTRAL
-   Todos os dados que podem precisar de ser alterados estão aqui,
-   em vez de espalhados pelo código
-========================= */
 const CONFIG = {
   // "const" = constante — o valor não pode ser reatribuído
   // "CONFIG" é um objeto (conjunto de pares chave: valor)
@@ -45,13 +26,6 @@ const CONFIG = {
   // Sufixo da moeda adicionado após os preços (Metical Moçambicano)
 };
 
-
-/* =========================
-   2) CATEGORIAS
-   Cada categoria agrupa IDs de produtos relacionados.
-   Quando o utilizador clica "Ver detalhes", o código usa isto
-   para saber quais produtos mostrar na galeria.
-========================= */
 const categories = {
   // Objeto com 4 categorias numeradas de 1 a 4
 
@@ -305,140 +279,61 @@ const products = {
     images: ["apito.jpg", "apito.jpg"],
   },
 };
-
-
-/* =========================
-   4) SELETORES (ATALHOS PARA O DOM)
-   Em vez de escrever document.querySelector() sempre,
-   criamos funções curtas $ e $$
-========================= */
-
 function $(selector) {
-  // "function" define uma função reutilizável
-  // "selector" é o parâmetro (o valor passado quando a função é chamada)
-
   return document.querySelector(selector);
-  // document.querySelector() devolve o PRIMEIRO elemento que corresponde ao seletor CSS
-  // Ex: $("#cart-count") devolve o elemento com id="cart-count"
 }
 
 function $$(selector) {
   return Array.from(document.querySelectorAll(selector));
-  // querySelectorAll() devolve TODOS os elementos que correspondem ao seletor
-  // Array.from() converte o resultado (NodeList) num array JavaScript normal
-  // Isto permite usar .forEach(), .map(), etc.
 }
-
-
-/* =========================
-   5) FORMATAÇÃO DE PREÇO
-========================= */
 
 function money(value) {
-  // Recebe um número (ex: 1250) e devolve uma string formatada (ex: "1250,00 MZN")
-
   return value.toFixed(2).replace(".", ",") + CONFIG.currencySuffix;
-  // .toFixed(2) = arredonda para 2 casas decimais → "1250.00"
-  // .replace(".", ",") = substitui o ponto por vírgula → "1250,00"
-  // + CONFIG.currencySuffix = adiciona " MZN" no final → "1250,00 MZN"
 }
-
-
-/* =========================
-   6) GERADOR DE LINKS DO WHATSAPP
-========================= */
 
 function waLink(text) {
-  // Recebe um texto e devolve um link completo para abrir o WhatsApp com essa mensagem
-
   return `https://wa.me/${CONFIG.waNumber}?text=${encodeURIComponent(text)}`;
-  // Template literal (backticks) para construir a URL
-  // encodeURIComponent(text) converte o texto para URL segura
-  // Ex: "Olá!" → "Ol%C3%A1%21" (espaços, acentos e símbolos ficam codificados)
 }
 
-
-/* =========================
-   7) FUNÇÕES DE MODAL (abrir e fechar)
-========================= */
-
 function openModal(modalEl) {
-  // Recebe o elemento HTML do modal e abre-o
-
   if (!modalEl) return;
-  // Verificação de segurança: se o elemento não existir, para aqui
-  // "return" sem valor sai da função imediatamente
-
   modalEl.classList.add("active");
-  // Adiciona a classe CSS "active" ao modal
-  // No CSS, .modal.active tem opacity:1 e pointer-events:auto
-
   modalEl.setAttribute("aria-hidden", "false");
-  // Informa os leitores de ecrã que o modal está visível
-
   document.body.style.overflow = "hidden";
-  // Desativa o scroll da página enquanto o modal está aberto
-  // (evita que o utilizador faça scroll atrás do modal)
 }
 
 function closeModal(modalEl) {
-  // Fecha o modal removendo a classe "active"
 
   if (!modalEl) return;
-  // Sai se o elemento não existir
-
   modalEl.classList.remove("active");
-  // Remove a classe "active" — o modal volta a ficar invisível (CSS)
-
   modalEl.setAttribute("aria-hidden", "true");
-  // Informa os leitores de ecrã que o modal está escondido
-
   document.body.style.overflow = "";
-  // Restaura o scroll da página (string vazia remove o estilo inline)
 }
 
 function closeAllModals() {
-  // Fecha TODOS os modais de uma vez (usado ao pressionar ESC ou clicar no logo)
-
-  closeModal($("#product-modal"));     // fecha modal do produto
-  closeModal($("#category-modal"));    // fecha modal da categoria
-  closeModal($("#cart-modal"));        // fecha modal do carrinho
+  closeModal($("#product-modal"));    
+  closeModal($("#category-modal"));    
+  closeModal($("#cart-modal"));       
   closeModal($("#search-modal"));
 }
 
-
-/* =========================
-   8) CONFIGURAR LINKS DE CONTACTO
-   Preenche os href dos cards de contacto com os valores reais
-========================= */
-
 function setupContactLinks() {
 
-  const wa   = $("#wa-contact-link");    // elemento do card WhatsApp
-  const ig   = $("#ig-contact-link");    // elemento do card Instagram
-  const fb   = $("#fb-contact-link");    // elemento do card Facebook
-  const mail = $("#mail-contact-link");  // elemento do card Email
+  const wa   = $("#wa-contact-link");  
+  const ig   = $("#ig-contact-link");   
+  const fb   = $("#fb-contact-link");  
+  const mail = $("#mail-contact-link");  
 
   if (wa) wa.href = waLink(CONFIG.welcomeText);
-  // Se o elemento existir, define o href com o link do WhatsApp
-  // O link abre o WhatsApp com a mensagem de boas-vindas pré-escrita
-
   if (ig) ig.href = CONFIG.instagramUrl;
-  // Define o link do Instagram direto da configuração
 
   if (fb) fb.href = CONFIG.facebookUrl;
-  // Define o link do Facebook
 
   if (mail) {
     mail.href =
       `mailto:${CONFIG.email}` +
-      // "mailto:" abre o cliente de email do dispositivo
-
       `?subject=${encodeURIComponent("Contato - Fashion Sport")}` +
-      // ?subject= define o assunto do email já preenchido
-
       `&body=${encodeURIComponent("Olá Fashion Sport! Preciso de ajuda com...")}`;
-      // &body= define o corpo do email já preenchido
   }
 
   // Botão "Fale conosco" no Hero
@@ -448,42 +343,22 @@ function setupContactLinks() {
       // addEventListener("click", ...) registra uma função que corre ao clicar
 
       window.open(waLink(CONFIG.welcomeText), "_blank", "noopener");
-      // window.open() abre uma URL numa nova aba
-      // "_blank" = nova aba
-      // "noopener" = segurança: a nova aba não pode aceder à janela original
     });
   }
 }
 
 
-/* =========================
-   9) CARRINHO DE COMPRAS
-   Dados guardados no localStorage (persiste entre sessões do browser)
-========================= */
-
 let cart = JSON.parse(localStorage.getItem("cart")) || [];
-// "let" declara uma variável que pode ser alterada
-// localStorage.getItem("cart") tenta recuperar o carrinho guardado
-// JSON.parse() converte a string guardada de volta para um array JavaScript
-// || [] significa: se não houver nada guardado (null), começa com array vazio
-
 function saveCart() {
   // Guarda o carrinho no localStorage para persistir entre sessões
 
   localStorage.setItem("cart", JSON.stringify(cart));
-  // JSON.stringify() converte o array para uma string (localStorage só guarda strings)
-  // setItem("chave", "valor") guarda na memória persistente do browser
 }
 
 function cartCount() {
   // Devolve o número TOTAL de itens no carrinho (soma das quantidades)
 
   return cart.reduce((sum, item) => sum + item.qty, 0);
-  // .reduce() percorre o array acumulando um valor
-  // sum = acumulador (começa em 0)
-  // item = cada produto no carrinho
-  // item.qty = quantidade desse produto
-  // Ex: [{qty:2}, {qty:3}] → 0+2+3 = 5
 }
 
 function cartTotal() {
@@ -493,62 +368,177 @@ function cartTotal() {
   // Multiplicamos preço × quantidade e somamos tudo
 }
 
+/* =====================================================
+   COMMIT #1 — JAVASCRIPT DO HEADER
+   
+   3 comportamentos novos:
+   1) Search expansível (toggle de classe CSS)
+   2) Header muda ao fazer scroll (classe .scrolled)
+   3) Menu mobile hamburguer (toggle de classes)
+   4) Badge do carrinho com animação bounce
+===================================================== */
+
+/* ── 1) SEARCH EXPANSÍVEL ───────────────────────── */
+function setupSearch() {
+  const wrap       = document.getElementById("searchWrap");
+  const toggleBtn  = document.getElementById("searchToggleBtn");
+  const input      = document.getElementById("searchInput");
+
+  if (!wrap || !toggleBtn || !input) return;
+
+  toggleBtn.addEventListener("click", () => {
+    const isOpen = wrap.classList.toggle("active");
+    // .toggle("active") adiciona se não tem, remove se tem
+    // devolve true se ficou com a classe (abriu), false se removeu (fechou)
+
+    if (isOpen) {
+      // Pequeno delay para o CSS expandir antes de focar
+      setTimeout(() => input.focus(), 50);
+      // .focus() coloca o cursor dentro do input automaticamente
+    }
+  });
+
+  // Fechar search ao clicar fora
+  document.addEventListener("click", (e) => {
+    if (!wrap.contains(e.target)) {
+      // .contains() verifica se e.target é filho de wrap
+      // Se o clique foi FORA do search-wrap, fecha
+      wrap.classList.remove("active");
+    }
+  });
+
+  // Fechar search ao pressionar ESC
+  input.addEventListener("keydown", (e) => {
+    if (e.key === "Escape") {
+      wrap.classList.remove("active");
+      toggleBtn.focus(); // devolve foco ao botão
+    }
+  });
+
+  // Pesquisa real: filtrar produtos ao escrever
+  input.addEventListener("input", (e) => {
+    const query = e.target.value.toLowerCase().trim();
+    // .toLowerCase() = converte para minúsculas para pesquisa case-insensitive
+    // .trim() = remove espaços no início/fim
+
+    if (query.length < 2) return;
+    // Não pesquisa com menos de 2 caracteres (evita resultados demais)
+
+    // Filtra os produtos pelo nome
+    const results = Object.values(products).filter(p =>
+      p.name.toLowerCase().includes(query)
+    );
+    // Object.values() = pega nos VALORES do objeto products (os dados de cada produto)
+    // .filter() = cria array apenas com os que passam a condição
+    // .includes(query) = verifica se o nome contém o texto pesquisado
+
+    console.log("Resultados:", results.map(p => p.name));
+    // Por agora só mostra na consola — no Commit #5 vamos mostrar dropdown de resultados
+  });
+}
+
+
+/* ── 2) HEADER MUDA AO FAZER SCROLL ─────────────── */
+function setupHeaderScroll() {
+  const header = document.getElementById("site-header");
+  if (!header) return;
+
+  // IntersectionObserver é mais eficiente que ouvir "scroll" (não bloqueia o main thread)
+  // Observa um ponto invisível no topo da página
+  const sentinel = document.createElement("div");
+  // createElement cria um elemento HTML dinamicamente (sem estar no HTML)
+  sentinel.style.cssText = "position:absolute;top:0;height:1px;width:1px;pointer-events:none;";
+  // cssText define múltiplos estilos de uma vez como string
+  document.body.prepend(sentinel);
+  // .prepend() insere como PRIMEIRO filho do body
+
+  const observer = new IntersectionObserver(
+    ([entry]) => {
+      // Desestruturação: [entry] pega o primeiro (e único) item do array entries
+      header.classList.toggle("scrolled", !entry.isIntersecting);
+      // Se o sentinel NÃO está visível (saiu do viewport), adiciona .scrolled
+      // Se está visível (estamos no topo), remove .scrolled
+    },
+    { threshold: 0 }
+    // threshold: 0 = dispara assim que 1px sai/entra do viewport
+  );
+
+  observer.observe(sentinel);
+}
+function setupMobileMenu() {
+  const btn  = document.getElementById("hamburgerBtn");
+  const menu = document.getElementById("mobileMenu");
+
+  if (!btn || !menu) return;
+
+  btn.addEventListener("click", () => {
+    const isOpen = btn.classList.toggle("open");
+    // Alterna classe "open" no botão (para a animação X)
+
+    menu.classList.toggle("open", isOpen);
+    // Adiciona/remove "open" no menu drawer
+
+    menu.setAttribute("aria-hidden", String(!isOpen));
+  });
+
+  // Fechar menu ao clicar fora
+  document.addEventListener("click", (e) => {
+    if (!btn.contains(e.target) && !menu.contains(e.target)) {
+      btn.classList.remove("open");
+      menu.classList.remove("open");
+      menu.setAttribute("aria-hidden", "true");
+    }
+  });
+}
+
+function closeMobileMenu() {
+  const btn  = document.getElementById("hamburgerBtn");
+  const menu = document.getElementById("mobileMenu");
+  if (btn)  btn.classList.remove("open");
+  if (menu) { menu.classList.remove("open"); menu.setAttribute("aria-hidden", "true"); }
+}
+
 function updateCartCountUI() {
-  // Atualiza o número visível no botão do carrinho no header
+  const badge = document.getElementById("cart-count");
+  if (!badge) return;
 
-  const el = $("#cart-count");
-  // Seleciona o elemento <span id="cart-count">
+  const count = cartCount(); // função já existe no script.js original
 
-  if (el) el.textContent = cartCount();
-  // .textContent define o texto visível do elemento
-  // Se o carrinho tem 3 itens, aparece "3" no botão
+  badge.textContent = count > 99 ? "99+" : count;
+  if (count > 0) {
+    badge.classList.add("visible");
+
+    badge.classList.remove("pop");    
+    void badge.offsetWidth;           
+    badge.classList.add("pop");        
+  } else {
+    badge.classList.remove("visible", "pop");
+    // Esconde o badge quando carrinho está vazio
+  }
 }
 
 function addToCart(productId, qty) {
-  // Adiciona um produto ao carrinho com a quantidade especificada
 
   const p = products[productId];
-  // Busca os dados do produto pelo ID na base de dados "products"
-
   if (!p) return;
-  // Se o produto não existir, sai da função
-
   const existing = cart.find((i) => i.id === productId);
-  // .find() procura no array o primeiro item que corresponde à condição
-  // Verifica se já existe este produto no carrinho
 
   if (existing) existing.qty += qty;
-  // Se já existe, ADICIONA à quantidade existente (em vez de duplicar)
-
   else cart.push({ id: productId, name: p.name, price: p.price, qty });
-  // Se não existe, adiciona um novo objeto ao array
-  // { id, name, price, qty } é a estrutura de cada item no carrinho
-  // .push() adiciona ao final do array
-
   saveCart();
-  // Guarda o carrinho atualizado no localStorage
-
   updateCartCountUI();
-  // Atualiza o número visível no header
 }
 
 function removeFromCart(productId) {
-  // Remove completamente um produto do carrinho
-
   cart = cart.filter((i) => i.id !== productId);
-  // .filter() cria um NOVO array apenas com os itens que NÃO têm este ID
-  // (equivale a apagar o item com este ID)
+ 
 
   saveCart();
   updateCartCountUI();
   renderCart();
-  // renderCart() redesenha o HTML do carrinho com os itens atualizados
 }
 
 function updateCartQty(productId, delta) {
-  // Altera a quantidade de um item no carrinho
-  // delta = +1 (aumentar) ou -1 (diminuir)
-
   const item = cart.find((i) => i.id === productId);
   // Encontra o item pelo ID
 
@@ -582,12 +572,6 @@ function clearCart() {
   updateCartCountUI();
   renderCart();
 }
-
-
-/* =========================
-   10) MODAL DO PRODUTO
-   Mostra imagem grande + miniaturas + quantidade + botão de compra
-========================= */
 
 let currentQty = 1;
 // Variável global que guarda a quantidade selecionada no modal do produto
@@ -707,13 +691,6 @@ function renderProductModal(productId) {
   openModal($("#product-modal"));
   // Abre o modal do produto (depois de tudo estar preparado)
 }
-
-
-/* =========================
-   11) MODAL DA CATEGORIA (GALERIA DE PRODUTOS)
-   Mostra todos os produtos de uma categoria em grelha
-========================= */
-
 function openCategoryModal(categoryId) {
   // Abre o modal com a galeria de produtos de uma categoria
 
@@ -1159,13 +1136,6 @@ function setupFooter() {
   if (footerFB) footerFB.href = CONFIG.facebookUrl;
 }
 
-
-/* =========================
-   19) INICIALIZAÇÃO PRINCIPAL
-   Esta função é chamada quando o HTML estiver completamente carregado.
-   Ela chama todas as funções de configuração.
-========================= */
-
 function init() {
   setupContactLinks();
   setupCheckout();
@@ -1181,13 +1151,10 @@ function init() {
   setupReveal();
   updateCartCountUI();
   setupFooter();
+  setupSearch();
+  setupHeaderScroll();
+  setupMobileMenu();
 }
-
-/* =========================
-   20) 
-   COLOCAR PRODUTOS EM DESTAQUE NA PAGINA
-   USANDO A FUNCAO FO FACTURED TRUE PARA CADA PRODUTO
-========================= */
 function renderFeaturedProducts() {
   const container = $("#featured-products");
   if (!container) return;
