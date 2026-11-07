@@ -84,62 +84,140 @@
 </header>
 
   <main>
-    <!-- ================= HERO (SECÇÃO PRINCIPAL / BANNER) ================= -->
-    <section class="hero" id="inicio">
+    <!-- =====================================================
+     COMMIT #2 — HERO SECTION
+     Substitui TODO o bloco <section class="hero" id="inicio"> ... </section>
+     do teu index.html por este.
 
-      <div class="container hero-grid">
-      <!-- hero-grid aplica um layout de 2 colunas (texto + imagem) -->
+     IDs mantidos: id="inicio" (link do menu) e id="talkBtn"
+     (o teu JS usa-o para abrir o WhatsApp).
+===================================================== -->
+<section class="hero" id="inicio">
 
-        <div class="hero-text reveal">
-        <!-- class="reveal" faz com que este elemento apareça com animação ao entrar no ecrã -->
+  <!-- FUNDO DECORATIVO: só visual, por isso aria-hidden="true"
+       (os leitores de ecrã ignoram este bloco) -->
+  <div class="hero-bg" aria-hidden="true">
+    <span class="hero-orb orb-1"></span>
+    <span class="hero-orb orb-2"></span>
+    <span class="hero-lines"></span>
+  </div>
 
-          <h1>Vista o Jogo e Domine o campo, <span>Futebooll</span> e inspiracao.</h1>
-          <!-- <h1> é o título principal da página (deve existir apenas 1 por página) -->
-          <!-- <span> envolve "Futebooll" para aplicar cor diferente com CSS -->
+  <div class="container hero-grid">
 
-          <p>
-            Queres jogar com estilo, faca a sua encomenda agora, Tênis, camisetas de clubes, luvas e acessórios com qualidade profissional.
-          </p>
-          <!-- <p> é um parágrafo de texto descritivo -->
+    <!-- ── COLUNA DO TEXTO ───────────────────────────── -->
+    <div class="hero-text reveal">
 
-          <div class="hero-actions">
-          <!-- div que agrupa os botões de ação do hero -->
+      <!-- Selo animado no topo -->
+      <span class="hero-badge">
+        <span class="badge-dot"></span>
+        Nova coleção 2026
+      </span>
 
-            <a href="#produtos" class="btn btn-primary">Ver coleção</a>
-            <!-- link estilizado como botão que leva o utilizador à secção de produtos -->
+      <!-- Título: "domine o campo." fica com gradiente (classe grad-text) -->
+      <h1>Vista o jogo e <span class="grad-text">domine o campo.</span></h1>
 
-            <button type="button" class="btn btn-outline" id="talkBtn">Fale conosco</button>
-            <!-- botão que o JavaScript vai configurar para abrir o WhatsApp -->
-            <!-- id="talkBtn" é capturado em setupContactLinks() no script.js -->
-          </div>
+      <p class="hero-tagline">Futebol e inspiração.</p>
 
-          <div class="hero-info">
-          <!-- div com caixas de informação rápida (estatísticas) -->
+      <p class="hero-desc">
+        Queres jogar com estilo? Faça a sua encomenda agora: tênis, camisetas de clubes,
+        luvas e acessórios com qualidade profissional.
+      </p>
 
-            <div class="info-box"><strong>+100</strong><span>Produtos</span></div>
-            <!-- <strong> deixa o texto em negrito e indica importância -->
+      <div class="hero-actions">
+        <a href="#produtos" class="btn btn-primary">
+          Ver coleção
+          <!-- seta SVG: substitui texto simples por um detalhe visual -->
+          <svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="5" y1="12" x2="19" y2="12"/>
+            <polyline points="12 5 19 12 12 19"/>
+          </svg>
+        </a>
 
-            <div class="info-box"><strong>24h</strong><span>Atendimento online</span></div>
-            <!-- segunda caixa de info -->
-          </div>
+        <button type="button" class="btn btn-outline" id="talkBtn">
+          <svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M21 11.5a8.4 8.4 0 0 1-12.4 7.4L3 20.5l1.6-5.1A8.4 8.4 0 1 1 21 11.5z"/>
+          </svg>
+          Fale conosco
+        </button>
+      </div>
+
+      <!-- Estatísticas: data-count é o valor final; o JS faz a contagem -->
+      <div class="hero-stats">
+        <div class="stat">
+          <strong>+<span data-count="100">100</span></strong>
+          <span>Produtos</span>
         </div>
-
-        <div class="hero-image reveal">
-        <!-- coluna da direita com a imagem principal -->
-
-          <div class="image-card">
-          <!-- envolve a imagem para aplicar borda arredondada e sombra -->
-
-            <img
-              src="tenis1.jpg"
-              alt="Pessoa usando roupa esportiva">
-            <!-- <img> exibe a imagem -->
-            <!-- src="tenis1.jpg" é o caminho do ficheiro de imagem -->
-            <!-- alt="..." descreve a imagem para utilizadores com leitores de ecrã (acessibilidade) -->
-          </div>
+        <div class="stat">
+          <strong><span data-count="24">24</span>h</strong>
+          <span>Atendimento online</span>
+        </div>
+        <div class="stat">
+          <strong><span data-count="4">4</span></strong>
+          <span>Categorias</span>
         </div>
       </div>
-    </section>
+    </div>
+
+    <!-- ── COLUNA DA IMAGEM ──────────────────────────── -->
+    <div class="hero-visual reveal">
+      <span class="hero-ring" aria-hidden="true"></span>
+
+      <div class="image-card">
+        <img src="tenis1.jpg" alt="Chuteira preta e laranja em relvado">
+      </div>
+
+      <!-- Cartão flutuante 1: métodos de pagamento (os mesmos do teu checkout) -->
+      <div class="hero-float float-a">
+        <span class="float-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+            <rect x="2" y="5" width="20" height="14" rx="3"/>
+            <line x1="2" y1="10" x2="22" y2="10"/>
+          </svg>
+        </span>
+        <div>
+          <strong>Pague como preferir</strong>
+          <small>Emola · M-Pesa · BCI</small>
+        </div>
+      </div>
+
+      <!-- Cartão flutuante 2: encomenda por WhatsApp -->
+      <div class="hero-float float-b">
+        <span class="float-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M21 11.5a8.4 8.4 0 0 1-12.4 7.4L3 20.5l1.6-5.1A8.4 8.4 0 1 1 21 11.5z"/>
+          </svg>
+        </span>
+        <div>
+          <strong>Encomenda rápida</strong>
+          <small>Finalize pelo WhatsApp</small>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── FAIXA QUE DESLIZA ─────────────────────────────
+       O conteúdo está repetido 2x de propósito: a animação move
+       a faixa 50% para a esquerda e volta ao início sem salto. -->
+  <div class="hero-marquee" aria-hidden="true">
+    <div class="marquee-track">
+      <span>Tênis &amp; Chuteiras</span><i></i>
+      <span>Camisetas de Clubes</span><i></i>
+      <span>Luvas Esportivas</span><i></i>
+      <span>Acessórios</span><i></i>
+      <span>Pagamento via Emola, M-Pesa e BCI</span><i></i>
+      <span>Encomenda pelo WhatsApp</span><i></i>
+
+      <span>Tênis &amp; Chuteiras</span><i></i>
+      <span>Camisetas de Clubes</span><i></i>
+      <span>Luvas Esportivas</span><i></i>
+      <span>Acessórios</span><i></i>
+      <span>Pagamento via Emola, M-Pesa e BCI</span><i></i>
+      <span>Encomenda pelo WhatsApp</span><i></i>
+    </div>
+  </div>
+
+</section>
+
     <!-- ================= PRODUTOS EM DESTAQUE ================= -->
 <section class="section featured-section" id="destaques">
   <div class="container">

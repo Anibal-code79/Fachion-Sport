@@ -978,6 +978,49 @@ Aguardo confirmação e instruções para pagamento.`;
     // Confirmação visual para o utilizador
   });
 }
+
+function setupCountUp() {
+  // Todos os números marcados com data-count="..."
+  const nums = $$("[data-count]");
+  if (nums.length === 0) return;
+
+  // Se o utilizador pediu menos animação, deixamos os valores finais e saímos
+  const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  if (reduceMotion) return;
+
+  // Antes de observar, todos começam em 0 (no HTML ficam com o valor final
+  // para quem tiver o JavaScript desligado)
+  nums.forEach((el) => { el.textContent = "0"; });
+
+  // Anima UM número de 0 até ao valor final
+  function animate(el) {
+    const target   = Number(el.dataset.count);  // valor final
+    const duration = 1400;                      // duração em milissegundos
+    const start    = performance.now();         // instante em que começou
+
+    function tick(now) {
+      // progress vai de 0 a 1 ao longo da duração
+      const progress = Math.min((now - start) / duration, 1);
+      // easing "ease-out": começa rápido e abranda no fim (mais natural)
+      const eased = 1 - Math.pow(1 - progress, 3);
+      el.textContent = Math.round(target * eased);
+      if (progress < 1) requestAnimationFrame(tick);   // continua no próximo frame
+    }
+    requestAnimationFrame(tick);
+  }
+
+  // Só começa a contar quando o número aparece no ecrã
+  const observer = new IntersectionObserver((entries, obs) => {
+    entries.forEach((entry) => {
+      if (entry.isIntersecting) {
+        animate(entry.target);
+        obs.unobserve(entry.target);   // conta uma única vez
+      }
+    });
+  }, { threshold: 0.6 });
+
+  nums.forEach((el) => observer.observe(el));
+}
 function setupGlobalClicks() {
 
   document.addEventListener("click", (e) => {
@@ -1191,6 +1234,7 @@ function init() {
   setupFooter();
   setupHeaderScroll();
   setupMobileMenu();
+  setupCountUp();
 }
 function renderFeaturedProducts() {
   const container = $("#featured-products");
