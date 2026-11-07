@@ -4,30 +4,17 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Fashion Sport | Moda esportiva com estilo</title>
-  
-  <!-- FONTES DO GOOGLE FONTS -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
-  <!-- preconnect abre a ligação com o servidor do Google antes de pedir a fonte, tornando mais rápido -->
-
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <!-- segundo preconnect para o servidor de ficheiros estáticos do Google Fonts -->
-
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-  <!-- carrega a fonte "Poppins" em vários pesos (300=fino até 800=negrito grosso) -->
-
   <link rel="stylesheet" href="style.css" />
-  <!-- liga o ficheiro de estilos CSS externo à página HTML -->
-
 </head>
 
 <body>
-  <!-- ================= HEADER (CABEÇALHO) ================= -->
   <header class="site-header" id="site-header">
   <div class="header-inner">
  
-    <!-- ── LOGO ─────────────────────────────────────── -->
     <a href="#inicio" class="logo" id="logoLink">
-      <!-- SVG em linha: sem ficheiro externo, colorido via CSS, sem pixelização -->
       <svg class="logo-icon" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
         <circle cx="16" cy="16" r="15" stroke="currentColor" stroke-width="1.5"/>
         <path d="M8 16 C8 10 13 7 16 7 C19 7 24 10 24 16 C24 22 19 25 16 25 C13 25 8 22 8 16Z"
@@ -47,29 +34,13 @@
       <a href="#contato"  class="nav-link">Contacto</a>
     </nav>
  
-    <!-- ── ACÇÕES (search + user + carrinho) ──────────── -->
     <div class="nav-actions">
- 
-      <!-- SEARCH BAR EXPANSÍVEL -->
-      <div class="search-wrap" id="searchWrap">
-        <button class="icon-btn" id="searchToggleBtn" aria-label="Abrir pesquisa" type="button">
-          <!-- Ícone lupa SVG inline -->
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
-            <circle cx="11" cy="11" r="7"/>
-            <line x1="16.5" y1="16.5" x2="22" y2="22"/>
-          </svg>
-        </button>
-        <input
-          class="search-input"
-          id="searchInput"
-          type="search"
-          placeholder="Pesquisar produtos..."
-          aria-label="Pesquisar produtos"
-          autocomplete="off"
-        />
-        <!-- O input começa com width:0 e expande via CSS quando .active -->
-      </div>
- 
+<button class="icon-btn" id="searchToggleBtn" aria-label="Abrir pesquisa" type="button">
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+    <circle cx="11" cy="11" r="7"/>
+    <line x1="16.5" y1="16.5" x2="22" y2="22"/>
+  </svg>
+</button>
       <!-- ÍCONE DE UTILIZADOR/CONTA -->
       <button class="icon-btn" aria-label="Minha conta" type="button" id="userBtn">
         <!-- Ícone pessoa SVG inline -->

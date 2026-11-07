@@ -368,75 +368,143 @@ function cartTotal() {
   // Multiplicamos preço × quantidade e somamos tudo
 }
 
-/* =====================================================
-   COMMIT #1 — JAVASCRIPT DO HEADER
-   
-   3 comportamentos novos:
-   1) Search expansível (toggle de classe CSS)
-   2) Header muda ao fazer scroll (classe .scrolled)
-   3) Menu mobile hamburguer (toggle de classes)
-   4) Badge do carrinho com animação bounce
-===================================================== */
-
-/* ── 1) SEARCH EXPANSÍVEL ───────────────────────── */
-function setupSearch() {
-  const wrap       = document.getElementById("searchWrap");
-  const toggleBtn  = document.getElementById("searchToggleBtn");
-  const input      = document.getElementById("searchInput");
-
-  if (!wrap || !toggleBtn || !input) return;
-
-  toggleBtn.addEventListener("click", () => {
-    const isOpen = wrap.classList.toggle("active");
-    // .toggle("active") adiciona se não tem, remove se tem
-    // devolve true se ficou com a classe (abriu), false se removeu (fechou)
-
-    if (isOpen) {
-      // Pequeno delay para o CSS expandir antes de focar
-      setTimeout(() => input.focus(), 50);
-      // .focus() coloca o cursor dentro do input automaticamente
-    }
-  });
-
-  // Fechar search ao clicar fora
-  document.addEventListener("click", (e) => {
-    if (!wrap.contains(e.target)) {
-      // .contains() verifica se e.target é filho de wrap
-      // Se o clique foi FORA do search-wrap, fecha
-      wrap.classList.remove("active");
-    }
-  });
-
-  // Fechar search ao pressionar ESC
-  input.addEventListener("keydown", (e) => {
-    if (e.key === "Escape") {
-      wrap.classList.remove("active");
-      toggleBtn.focus(); // devolve foco ao botão
-    }
-  });
-
-  // Pesquisa real: filtrar produtos ao escrever
-  input.addEventListener("input", (e) => {
-    const query = e.target.value.toLowerCase().trim();
-    // .toLowerCase() = converte para minúsculas para pesquisa case-insensitive
-    // .trim() = remove espaços no início/fim
-
-    if (query.length < 2) return;
-    // Não pesquisa com menos de 2 caracteres (evita resultados demais)
-
-    // Filtra os produtos pelo nome
-    const results = Object.values(products).filter(p =>
-      p.name.toLowerCase().includes(query)
-    );
-    // Object.values() = pega nos VALORES do objeto products (os dados de cada produto)
-    // .filter() = cria array apenas com os que passam a condição
-    // .includes(query) = verifica se o nome contém o texto pesquisado
-
-    console.log("Resultados:", results.map(p => p.name));
-    // Por agora só mostra na consola — no Commit #5 vamos mostrar dropdown de resultados
-  });
+function normalizeText(text) {
+  return String(text)
+    .toLowerCase()
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "");
 }
 
+function categoryOfProduct(productId) {
+  const catId = Object.keys(categories).find((id) =>
+    categories[id].items.includes(Number(productId))
+  );
+  return catId ? categories[catId].name : "";
+}
+
+/* ── 3) DESENHAR OS RESULTADOS ─────────────────────── */
+function renderSearchResults(query) {
+  const box = document.getElementById("searchResults");
+  if (!box) return;
+
+  const q = normalizeText(query.trim());
+
+  // Sem texto: mostra só uma dica (os chips ficam visíveis em cima)
+  if (q.length < 2) {
+    box.innerHTML = `<div class="search-empty">Escreve pelo menos 2 letras para pesquisar.</div>`;
+    return;
+  }
+
+  // Object.entries dá pares [id, produto]; filter fica com os que batem.
+  // Pesquisamos no nome, na descrição e no nome da categoria.
+  const results = Object.entries(products)
+    .filter(([id, p]) => {
+      const haystack = normalizeText(`${p.name} ${p.desc} ${categoryOfProduct(id)}`);
+      return haystack.includes(q);
+    })
+    .slice(0, 8); // máximo 8 resultados, para a lista não ficar enorme
+
+  if (results.length === 0) {
+    box.innerHTML = `<div class="search-empty">Nenhum produto encontrado para "<strong>${query.trim()}</strong>".</div>`;
+    return;
+  }
+
+  // data-search-product guarda o id para sabermos qual abrir ao clicar
+  box.innerHTML =
+    `<div class="search-label">${results.length} resultado(s)</div>` +
+    results
+      .map(([id, p]) => `
+        <button class="search-item" type="button" data-search-product="${id}">
+          <img src="${p.images[0]}" alt="${p.name}">
+          <div class="search-item-info">
+            <div class="search-item-name">${p.name}</div>
+            <div class="search-item-cat">${categoryOfProduct(id)}</div>
+          </div>
+          <div class="search-item-price">${money(p.price)}</div>
+        </button>`)
+      .join("");
+}
+
+function openSearch() {
+  openModal(document.getElementById("search-modal"));
+  const input = document.getElementById("searchInput");
+  input.value = "";
+  renderSearchResults("");
+  // Pequeno atraso: espera o modal ficar visível antes de focar
+  setTimeout(() => input.focus(), 60);
+}
+
+function closeSearch() {
+  closeModal(document.getElementById("search-modal"));
+}
+
+/* ── 5) LIGAR TUDO ─────────────────────────────────── */
+function setupSearch() {
+  const modal    = document.getElementById("search-modal");
+  const toggle   = document.getElementById("searchToggleBtn");
+  const input    = document.getElementById("searchInput");
+  const closeBtn = document.getElementById("closeSearchBtn");
+  const results  = document.getElementById("searchResults");
+  const chips    = document.getElementById("searchChips");
+
+  // Se algum elemento não existir, avisa na consola (F12) em vez de falhar calado
+  if (!modal || !toggle || !input || !results || !chips) {
+    console.warn("Pesquisa: falta algum elemento no HTML (search-modal, searchToggleBtn, searchInput...).");
+    return;
+  }
+
+  // Chips: um por categoria, gerados a partir do objeto "categories"
+  chips.innerHTML = Object.entries(categories)
+    .map(([id, c]) => `<button class="search-chip" type="button" data-search-cat="${id}">${c.name}</button>`)
+    .join("");
+
+  // Clicar na lupa abre o modal
+  toggle.addEventListener("click", openSearch);
+
+  // Botão Esc e clique no fundo escuro fecham
+  closeBtn.addEventListener("click", closeSearch);
+  modal.addEventListener("click", (e) => {
+    if (e.target === modal) closeSearch(); // só se clicou no fundo, não no painel
+  });
+
+  // Cada letra digitada atualiza os resultados em tempo real
+  input.addEventListener("input", () => renderSearchResults(input.value));
+
+  // Enter abre o primeiro resultado
+  input.addEventListener("keydown", (e) => {
+    if (e.key === "Enter") {
+      const first = results.querySelector("[data-search-product]");
+      if (first) first.click();
+    }
+  });
+
+  // Clique num resultado: fecha a pesquisa e abre o produto
+  results.addEventListener("click", (e) => {
+    const item = e.target.closest("[data-search-product]");
+    if (!item) return;
+    closeSearch();
+    renderProductModal(Number(item.dataset.searchProduct));
+  });
+
+  // Clique num chip: fecha a pesquisa e abre a categoria
+  chips.addEventListener("click", (e) => {
+    const chip = e.target.closest("[data-search-cat]");
+    if (!chip) return;
+    closeSearch();
+    openCategoryModal(Number(chip.dataset.searchCat));
+  });
+
+  // Teclado: Esc fecha; "/" abre (como no GitHub), exceto se já estiver a escrever
+  document.addEventListener("keydown", (e) => {
+    if (e.key === "Escape" && modal.classList.contains("active")) closeSearch();
+
+    const typing = ["INPUT", "TEXTAREA", "SELECT"].includes(document.activeElement.tagName);
+    if (e.key === "/" && !typing) {
+      e.preventDefault();
+      openSearch();
+    }
+  });
+}
 
 /* ── 2) HEADER MUDA AO FAZER SCROLL ─────────────── */
 function setupHeaderScroll() {
@@ -910,14 +978,6 @@ Aguardo confirmação e instruções para pagamento.`;
     // Confirmação visual para o utilizador
   });
 }
-
-
-/* =========================
-   14) EVENTOS GLOBAIS (CLIQUES)
-   Um único listener para todos os botões com data-attributes
-   Esta abordagem é mais eficiente do que colocar um listener em cada botão
-========================= */
-
 function setupGlobalClicks() {
 
   document.addEventListener("click", (e) => {
@@ -938,21 +998,17 @@ function setupGlobalClicks() {
       return;
       // "return" evita que o código continue a verificar outras condições
     }
+   if (btnProd) {
+  const productId = Number(btnProd.dataset.openProduct);
 
-    // 2) Abrir produto (botões com data-open-product)
-    const btnProd = e.target.closest("[data-open-product]");
-    if (btnProd) {
-      const productId = Number(btnProd.dataset.openProduct);
+  closeModal($("#search-modal"));   // <-- NOVA LINHA
 
-      if ($("#category-modal")?.classList.contains("active")) {
-        closeModal($("#category-modal"));
-        // Fecha o modal da categoria antes de abrir o do produto
-        // (mais limpo visualmente)
-      }
-
-      renderProductModal(productId);
-      return;
-    }
+  if ($("#category-modal")?.classList.contains("active")) {
+    closeModal($("#category-modal"));
+  }
+  renderProductModal(productId);
+  return;
+}
 
     // 3) Adicionar rapidamente ao carrinho (data-quick-add)
     const btnQuick = e.target.closest("[data-quick-add]");
@@ -990,18 +1046,11 @@ function setupGlobalClicks() {
   });
 }
 
-
-/* =========================
-   15) BOTÕES FIXOS (abrir/fechar modais, limpar carrinho)
-========================= */
-
 function setupButtons() {
 
-  // Abrir carrinho
-  $("#openCartBtn")?.addEventListener("click", openCart);
-  // "?." = optional chaining: só adiciona o listener se o elemento existir
-  // É a forma curta de: if ($("#openCartBtn")) { ... }
 
+  $("#searchToggleBtn")?.addEventListener("click", openSearchModal);
+  $("#openCartBtn")?.addEventListener("click", openCart);
   $("#floatingCartBtn")?.addEventListener("click", openCart);
   // O botão flutuante também abre o carrinho
 
@@ -1056,14 +1105,6 @@ function setupCloseOnBackdropAndEsc() {
     // e.key contém o nome da tecla pressionada
   });
 }
-
-
-/* =========================
-   17) ANIMAÇÃO REVEAL
-   Usa IntersectionObserver — uma API moderna que "observa"
-   quando elementos entram no campo de visão da janela
-========================= */
-
 function setupReveal() {
 
   const reveals = $$(".reveal");
@@ -1080,9 +1121,6 @@ function setupReveal() {
       // Percorre cada entrada
 
       if (entry.isIntersecting) entry.target.classList.add("active");
-      // .isIntersecting = true se o elemento está visível na janela
-      // .target = o elemento em questão
-      // .classList.add("active") dispara a animação CSS de reveal
     });
 
   }, { threshold: 0.15 });
@@ -1151,7 +1189,6 @@ function init() {
   setupReveal();
   updateCartCountUI();
   setupFooter();
-  setupSearch();
   setupHeaderScroll();
   setupMobileMenu();
 }
