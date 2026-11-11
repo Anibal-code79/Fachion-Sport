@@ -1236,42 +1236,200 @@ function init() {
   setupMobileMenu();
   setupCountUp();
 }
+/*COMMIT #3 — JS DOS PRODUTOS EM DESTAQUE */
+
+/* ── 1) FAVORITOS (guardados no localStorage) ───────── */
+let favoriteIds = JSON.parse(localStorage.getItem("favorites")) || [];
+
+function isFavorite(id) {
+  return favoriteIds.includes(Number(id));
+}
+
+// Liga/desliga um favorito e devolve o novo estado (true = favorito)
+function toggleFavorite(id) {
+  id = Number(id);
+  favoriteIds = isFavorite(id)
+    ? favoriteIds.filter((f) => f !== id)   // já era favorito: remove
+    : [...favoriteIds, id];                 // não era: adiciona ("..." copia o array antigo)
+  localStorage.setItem("favorites", JSON.stringify(favoriteIds));
+  return isFavorite(id);
+}
+
+/* ── 2) TOAST: aviso flutuante que desaparece sozinho ── */
+// message = texto; actionLabel/onAction (opcionais) = botão dentro do aviso
+function showToast(message, actionLabel, onAction) {
+  // Cria a caixa que guarda os avisos (só da primeira vez)
+  let box = document.getElementById("toast-box");
+  if (!box) {
+    box = document.createElement("div");
+    box.id = "toast-box";
+    box.setAttribute("aria-live", "polite");   // leitores de ecrã anunciam o aviso
+    document.body.appendChild(box);
+  }
+
+  const toast = document.createElement("div");
+  toast.className = "toast";
+
+  const text = document.createElement("span");
+  text.textContent = message;                  // textContent (e não innerHTML): seguro contra HTML no nome
+  toast.appendChild(text);
+
+  if (actionLabel && onAction) {
+    const btn = document.createElement("button");
+    btn.type = "button";
+    btn.className = "toast-action";
+    btn.textContent = actionLabel;
+    btn.addEventListener("click", () => { onAction(); toast.remove(); });
+    toast.appendChild(btn);
+  }
+
+  box.appendChild(toast);
+  // O frame seguinte faz a classe "show" disparar a transição CSS (fade + subir)
+  requestAnimationFrame(() => toast.classList.add("show"));
+
+  // Some após 3,2s: primeiro desvanece, depois remove do HTML
+  setTimeout(() => {
+    toast.classList.remove("show");
+    setTimeout(() => toast.remove(), 300);
+  }, 3200);
+}
+
+/* ── 3) SETAS: ativa/desativa nos extremos ──────────── */
+function updateFeaturedArrows() {
+  const track = document.getElementById("featured-products");
+  const prev  = document.getElementById("fpPrev");
+  const next  = document.getElementById("fpNext");
+  if (!track) return;
+
+  const maxScroll = track.scrollWidth - track.clientWidth - 2;  // -2: tolerância de arredondamento
+  if (prev) prev.disabled = track.scrollLeft <= 2;
+  if (next) next.disabled = track.scrollLeft >= maxScroll;
+}
+
+/* ── 4) DESENHAR OS CARTÕES + LIGAR OS EVENTOS ──────── */
 function renderFeaturedProducts() {
-  const container = $("#featured-products");
+  const container = document.getElementById("featured-products");
   if (!container) return;
 
-  const featuredItems = Object.entries(products).filter(([id, product]) => product.featured);
-  
+  // Só os produtos com featured: true
+  const featuredItems = Object.entries(products).filter(([id, p]) => p.featured);
+
   if (featuredItems.length === 0) {
-    container.innerHTML = "<p>Nenhum produto em destaque no momento.</p>";
+    container.innerHTML = `<p class="fp-empty">Nenhum produto em destaque no momento.</p>`;
     return;
   }
 
-  container.innerHTML = featuredItems.map(([id, product]) => `
-    <article class="product-card featured-card">
-      <div class="product-image">
-        <img src="${product.images[0]}" alt="${product.name}">
-        <div class="product-overlay">
-          <button class="overlay-btn" type="button" data-open-product="${id}">
-            Ver detalhes
-          </button>
-        </div>
-      </div>
+  // Descobre o nome da categoria de um produto (procura o id nas listas de "categories")
+  const categoryName = (productId) => {
+    const catId = Object.keys(categories).find((cid) =>
+      categories[cid].items.includes(Number(productId))
+    );
+    return catId ? categories[catId].name : "";
+  };
 
-      <div class="product-content">
-        <div class="featured-badge">⭐ Produto em destaque</div>
-        <h3>${product.name}</h3>
-        <p>${product.desc}</p>
-        <div class="product-footer">
-          <span class="price">${money(product.price)}</span>
-          <button class="mini-link" type="button" data-quick-add="${id}">
-            Comprar
+  // data-fp-open / data-fp-fav / data-fp-add: atributos PRÓPRIOS destes cartões.
+  // Não usamos data-open-product/data-quick-add para não depender do listener global.
+  container.innerHTML = featuredItems.map(([id, p]) => `
+    <article class="fp-card">
+
+      <button class="fp-media" type="button" data-fp-open="${id}" aria-label="Ver detalhes de ${p.name}">
+        <img src="${p.images[0]}" alt="${p.name}" loading="lazy">
+        <span class="fp-badge">
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.1 6.3 6.9 1-5 4.9 1.2 6.8L12 17.8 5.8 21l1.2-6.8-5-4.9 6.9-1z"/></svg>
+          Destaque
+        </span>
+      </button>
+
+      <button class="fp-fav ${isFavorite(id) ? "active" : ""}" type="button"
+              data-fp-fav="${id}" aria-pressed="${isFavorite(id)}" aria-label="Guardar nos favoritos">
+        <svg viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.7l-1-1.1a5.5 5.5 0 0 0-7.8 7.8l1 1.1L12 21l7.8-7.5 1-1.1a5.5 5.5 0 0 0 0-7.8z"/>
+        </svg>
+      </button>
+
+      <div class="fp-body">
+        <span class="fp-cat">${categoryName(id)}</span>
+        <h3 class="fp-name">${p.name}</h3>
+        <p class="fp-desc">${p.desc}</p>
+
+        <div class="fp-price-row">
+          <span class="fp-price">${money(p.price)}</span>
+        </div>
+
+        <div class="fp-actions">
+          <button class="fp-btn fp-btn-ghost" type="button" data-fp-open="${id}">Ver detalhes</button>
+          <button class="fp-btn fp-btn-buy" type="button" data-fp-add="${id}">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/>
+              <path d="M16 10a4 4 0 0 1-8 0"/>
+            </svg>
+            <span>Adicionar</span>
           </button>
         </div>
       </div>
     </article>
   `).join("");
+
+  // ── Eventos: ligados UMA só vez (a marca data-bound evita duplicar) ──
+  if (container.dataset.bound === "1") { updateFeaturedArrows(); return; }
+  container.dataset.bound = "1";
+
+  // Um único listener no contentor trata os 3 tipos de clique (event delegation)
+  container.addEventListener("click", (e) => {
+
+    // a) Ver detalhes (imagem ou botão)
+    const openBtn = e.target.closest("[data-fp-open]");
+    if (openBtn) {
+      renderProductModal(Number(openBtn.dataset.fpOpen));
+      return;
+    }
+
+    // b) Coração
+    const favBtn = e.target.closest("[data-fp-fav]");
+    if (favBtn) {
+      const active = toggleFavorite(favBtn.dataset.fpFav);
+      favBtn.classList.remove("active");     // remove e força reflow para a animação repetir
+      void favBtn.offsetWidth;
+      favBtn.classList.toggle("active", active);
+      favBtn.setAttribute("aria-pressed", String(active));
+      showToast(active ? "Adicionado aos favoritos" : "Removido dos favoritos");
+      return;
+    }
+
+    // c) Adicionar ao carrinho
+    const addBtn = e.target.closest("[data-fp-add]");
+    if (addBtn) {
+      const id = Number(addBtn.dataset.fpAdd);
+      addToCart(id, 1);
+
+      // Feedback no próprio botão: fica verde com "Adicionado" durante 1,6s
+      const label = addBtn.querySelector("span");
+      addBtn.classList.add("added");
+      label.textContent = "Adicionado";
+      setTimeout(() => {
+        addBtn.classList.remove("added");
+        label.textContent = "Adicionar";
+      }, 1600);
+
+      showToast(`${products[id].name} no carrinho`, "Ver carrinho", openCart);
+    }
+  });
+
+  // Setas: avançam a largura de um cartão + o espaço (20px)
+  const step = () => {
+    const card = container.querySelector(".fp-card");
+    return card ? card.offsetWidth + 20 : 300;
+  };
+  document.getElementById("fpPrev")?.addEventListener("click", () =>
+    container.scrollBy({ left: -step(), behavior: "smooth" }));
+  document.getElementById("fpNext")?.addEventListener("click", () =>
+    container.scrollBy({ left: step(), behavior: "smooth" }));
+
+  container.addEventListener("scroll", updateFeaturedArrows, { passive: true });
+  window.addEventListener("resize", updateFeaturedArrows);
+  updateFeaturedArrows();
 }
+
 function openSearchModal() {
   openModal($("#search-modal"));
 
