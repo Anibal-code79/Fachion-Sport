@@ -1389,6 +1389,140 @@ function setupFooter() {
   if (footerFB) footerFB.href = CONFIG.facebookUrl;
 }
 
+/* =====================================================
+   COMMIT #5 — JS DE "SOBRE" E DO MODAL "SABER MAIS"
+   No script.js:
+   1) Cola TODO este ficheiro (por exemplo antes do init())
+   2) Acrescenta  setupAbout();  ao init()
+   Usa funções que já existem: $, $$, openModal, closeModal, money, waLink.
+===================================================== */
+
+/* ── 1) INFORMAÇÕES DA LOJA (EDITE AQUI) ───────────────
+   Deixe "" (vazio) o que não quiser mostrar: o site esconde sozinho.
+   Preencha só com informação verdadeira. */
+const STORE_INFO = {
+  since:    "",   // ex.: "2024"
+  address:  "",   // ex.: "Av. 25 de Setembro, Maputo"
+  hours:    "",   // ex.: "Seg–Sáb, 8h às 18h"
+  delivery: "",   // ex.: "Entregamos em Maputo e Matola. O custo é combinado no WhatsApp."
+  returns:  "",   // ex.: "Trocas até 7 dias após a compra, com o produto sem uso."
+};
+
+/* ── 2) PREENCHER OS DADOS DINÂMICOS ─────────────────── */
+function fillAboutData() {
+
+  // a) Factos opcionais: [data-store="chave"] mostra-se só se STORE_INFO.chave tiver texto
+  $$("[data-store]").forEach((el) => {
+    const value = (STORE_INFO[el.dataset.store] || "").trim();
+    if (value) {
+      const target = el.querySelector("[data-store-value]");   // onde escrever o texto
+      if (target) target.textContent = value;                  // textContent: seguro contra HTML
+      el.hidden = false;                                       // mostra
+    } else {
+      el.hidden = true;                                        // esconde
+    }
+  });
+
+  // b) Total de produtos (conta as chaves do objeto "products")
+  $$("[data-about-total]").forEach((el) => { el.textContent = Object.keys(products).length; });
+
+  // c) Contador e preço mínimo de cada categoria, sempre a partir dos dados reais
+  Object.keys(categories).forEach((catId) => {
+    const ids = categories[catId].items.filter((id) => products[id]);
+    const countEl = $(`[data-about-count="${catId}"]`);
+    const minEl   = $(`[data-about-min="${catId}"]`);
+    if (countEl) countEl.textContent = ids.length;
+    if (minEl && ids.length) minEl.textContent = money(Math.min(...ids.map((id) => products[id].price)));
+  });
+
+  // d) Links de contacto (os mesmos do resto do site, vindos de CONFIG)
+  const links = {
+    wa:   waLink(CONFIG.welcomeText),
+    ig:   CONFIG.instagramUrl,
+    fb:   CONFIG.facebookUrl,
+    mail: `mailto:${CONFIG.email}?subject=${encodeURIComponent("Contato - Fashion Sport")}`,
+  };
+  $$("[data-about-link]").forEach((a) => { a.href = links[a.dataset.aboutLink]; });
+}
+
+/* ── 3) MODAL + SEPARADORES ──────────────────────────── */
+function setupAbout() {
+  const modal   = $("#about-modal");
+  const openBtn = $("#aboutMoreBtn");
+  const closeBtn = $("#closeAboutBtn");
+  const tabs    = $$(".am-tab");
+  const panels  = $$(".am-panel");
+  const scroller = $(".am-panels");
+
+  // Aviso útil na consola (F12) se faltar o HTML, em vez de falhar calado
+  if (!modal || !openBtn || tabs.length === 0) {
+    console.warn("Sobre: falta o modal #about-modal ou o botão #aboutMoreBtn no HTML.");
+    return;
+  }
+
+  fillAboutData();
+
+  let lastFocus = null;   // guarda quem tinha o foco, para o devolver ao fechar
+
+  // Mostra um separador e esconde os outros
+  function selectTab(name, moveFocus = false) {
+    tabs.forEach((tab) => {
+      const on = tab.dataset.amTab === name;
+      tab.classList.toggle("active", on);
+      tab.setAttribute("aria-selected", String(on));
+      tab.tabIndex = on ? 0 : -1;      // só o separador ativo entra na ordem do Tab ("roving tabindex")
+      if (on && moveFocus) tab.focus();
+    });
+    panels.forEach((p) => { p.hidden = p.id !== `panel-${name}`; });
+    if (scroller) scroller.scrollTop = 0;     // cada separador abre no topo
+  }
+
+  function openAbout(name = "quem") {
+    lastFocus = document.activeElement;
+    selectTab(name);
+    openModal(modal);
+    closeBtn?.focus();                // o foco entra no modal (acessibilidade por teclado)
+  }
+
+  function closeAbout() {
+    closeModal(modal);
+    if (lastFocus && lastFocus.focus) lastFocus.focus();   // devolve o foco ao botão "Saber mais"
+  }
+
+  // Abrir e fechar
+  openBtn.addEventListener("click", () => openAbout("quem"));
+  closeBtn?.addEventListener("click", closeAbout);
+  modal.addEventListener("click", (e) => { if (e.target === modal) closeAbout(); });   // clique no fundo escuro
+  document.addEventListener("keydown", (e) => {
+    if (e.key === "Escape" && modal.classList.contains("active")) closeAbout();
+  });
+
+  // Clique nos separadores
+  tabs.forEach((tab) => tab.addEventListener("click", () => selectTab(tab.dataset.amTab)));
+
+  // Teclado nos separadores: setas, Home e End (padrão ARIA para tablist)
+  $(".am-tabs").addEventListener("keydown", (e) => {
+    const i = tabs.findIndex((t) => t.getAttribute("aria-selected") === "true");
+    let next = null;
+    if (e.key === "ArrowRight") next = (i + 1) % tabs.length;
+    if (e.key === "ArrowLeft")  next = (i - 1 + tabs.length) % tabs.length;
+    if (e.key === "Home") next = 0;
+    if (e.key === "End")  next = tabs.length - 1;
+    if (next !== null) {
+      e.preventDefault();
+      selectTab(tabs[next].dataset.amTab, true);
+    }
+  });
+
+  // Botões "Ver produtos": fecham este modal e abrem o catálogo (Commit #4)
+  modal.addEventListener("click", (e) => {
+    const btn = e.target.closest("[data-about-cat]");
+    if (!btn) return;
+    closeModal(modal);
+    if (typeof openCategoryModal === "function") openCategoryModal(Number(btn.dataset.aboutCat));
+  });
+}
+
 function init() {
   setupContactLinks();
   setupCheckout();
@@ -1407,7 +1541,8 @@ function init() {
   setupHeaderScroll();
   setupMobileMenu();
   setupCountUp();
-  setupCatalog()
+  setupCatalog();
+  setupAbout();
 }
 /*COMMIT #3 — JS DOS PRODUTOS EM DESTAQUE */
 

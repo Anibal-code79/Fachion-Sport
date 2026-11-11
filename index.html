@@ -347,44 +347,292 @@
   </div>
 </section>
 
-    <!-- ================= SOBRE ================= -->
-    <section class="section" id="sobre">
-    <!-- secção "sobre a empresa" -->
+<!-- COMMIT #5 — SECÇÃO "SOBRE" + MODAL "SABER MAIS" -->
 
-      <div class="about-box reveal">
-      <!-- caixa com layout de 2 colunas: imagem + texto -->
 
-        <div class="about-image">
-        <!-- coluna da esquerda com imagem decorativa -->
-          <img src="bola2.jpg" alt="Moda esportiva">
-        </div>
+<!-- ═══════════════ PARTE A — SECÇÃO NA PÁGINA ═══════════════ -->
+<section class="section ab-section" id="sobre">
+  <div class="container ab-grid">
 
-        <div class="about-content">
-        <!-- coluna da direita com texto descritivo da empresa -->
+    <!-- ── COLAGEM DE FOTOS ──────────────────────────── -->
+    <div class="ab-visual reveal">
+      <div class="ab-photo ab-photo-main">
+        <img src="bola2.jpg" alt="Bola de futebol sobre a relva" loading="lazy">
+      </div>
+      <div class="ab-photo ab-photo-small">
+        <img src="clube1.jpg" alt="Camisetas de clubes penduradas" loading="lazy">
+      </div>
 
-          <h3>Sobre a Fashion Sport</h3>
-          <!-- título da secção sobre -->
+      <!-- Cartão flutuante: o número é calculado pelo JS a partir dos teus produtos -->
+      <div class="ab-badge">
+        <strong data-about-total>27</strong>
+        <span>produtos no catálogo</span>
+      </div>
 
-          <p>A Fashion Sporty é uma loja online dedicada aos apaixonados por futebol.</p>
-          <!-- primeiro parágrafo descritivo -->
+      <!-- Só aparece se preencheres STORE_INFO.since no script.js -->
+      <div class="ab-badge ab-badge-b" data-store="since" hidden>
+        <span>Desde</span>
+        <strong data-store-value></strong>
+      </div>
 
-          <p>Oferecendo uma seleção completa de vestuário e equipamentos...</p>
-          <!-- segundo parágrafo -->
+      <span class="ab-dots" aria-hidden="true"></span>
+    </div>
 
-          <div class="features">
-          <!-- grelha 2x2 com características/diferenciais da loja -->
+    <!-- ── TEXTO ─────────────────────────────────────── -->
+    <div class="ab-content reveal">
+      <span class="ab-eyebrow">Sobre nós</span>
+      <h2>Vivemos o futebol <span class="grad-text">dentro e fora do campo.</span></h2>
 
-            <div class="feature"><strong>Qualidade</strong><span>Ótimo acabamento.</span></div>
-            <!-- cada .feature é uma caixinha com título em negrito e descrição abaixo -->
+      <p class="ab-lead">A Fashion Sport é uma loja online dedicada aos apaixonados por futebol.</p>
+      <p>
+        Reunimos num só lugar tênis e chuteiras, camisetas de clubes, luvas e acessórios,
+        sempre com qualidade, estilo e desempenho para dentro e fora do campo.
+      </p>
+      <p>
+        Aqui o processo é simples: escolha os seus produtos, adicione ao carrinho e finalize
+        o pedido pelo WhatsApp, onde confirmamos tudo consigo.
+      </p>
 
-            <div class="feature"><strong>Original</strong><span>Tendências versaties.</span></div>
-            <div class="feature"><strong>Loja online</strong><span>Compre de qualquer lugar.</span></div>
-            <div class="feature"><strong>Atendimento rápido</strong><span>Suporte ágil.</span></div>
+      <!-- Os 4 pilares que já tinhas, agora com ícones SVG (sem emojis) -->
+      <ul class="ab-pillars">
+        <li>
+          <span class="ab-ico">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="6"/><path d="M15.5 13.5 17 22l-5-3-5 3 1.5-8.5"/></svg>
+          </span>
+          <div><strong>Qualidade</strong><span>Ótimo acabamento em cada peça.</span></div>
+        </li>
+        <li>
+          <span class="ab-ico">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2 4 5v6c0 5 3.4 9.4 8 11 4.6-1.6 8-6 8-11V5z"/><polyline points="9 12 11 14 15 10"/></svg>
+          </span>
+          <div><strong>Original</strong><span>Tendências versáteis do campo à rua.</span></div>
+        </li>
+        <li>
+          <span class="ab-ico">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+          </span>
+          <div><strong>Loja online</strong><span>Compre de qualquer lugar.</span></div>
+        </li>
+        <li>
+          <span class="ab-ico">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+          </span>
+          <div><strong>Atendimento rápido</strong><span>Suporte ágil pelo WhatsApp.</span></div>
+        </li>
+      </ul>
+
+      <div class="ab-actions">
+        <!-- id="aboutMoreBtn": o JS liga este botão ao modal -->
+        <button class="btn btn-primary" type="button" id="aboutMoreBtn" aria-haspopup="dialog">
+          Saber mais
+          <svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+        </button>
+        <a class="btn btn-outline" href="#contato">Fale conosco</a>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+
+<!-- ═══════════════ PARTE B — MODAL "SABER MAIS" ═══════════════ -->
+<div id="about-modal" class="modal" aria-hidden="true" role="dialog" aria-modal="true" aria-labelledby="about-title">
+  <div class="modal-content about-modal-content">
+
+    <button class="modal-close" type="button" id="closeAboutBtn" aria-label="Fechar">&times;</button>
+
+    <!-- Cabeçalho e separadores ficam fixos; só o conteúdo faz scroll -->
+    <header class="am-head">
+      <span class="ab-eyebrow">Fashion Sport</span>
+      <h2 id="about-title">Tudo sobre a nossa loja</h2>
+      <p>Conheça quem somos, o que vendemos e como comprar com tranquilidade.</p>
+    </header>
+
+    <div class="am-tabs" role="tablist" aria-label="Secções">
+      <button class="am-tab active" type="button" role="tab" id="tab-quem"     aria-selected="true"  aria-controls="panel-quem"     data-am-tab="quem">Quem somos</button>
+      <button class="am-tab"        type="button" role="tab" id="tab-produtos" aria-selected="false" aria-controls="panel-produtos" data-am-tab="produtos" tabindex="-1">Produtos</button>
+      <button class="am-tab"        type="button" role="tab" id="tab-comprar"  aria-selected="false" aria-controls="panel-comprar"  data-am-tab="comprar"  tabindex="-1">Como comprar</button>
+      <button class="am-tab"        type="button" role="tab" id="tab-perguntas" aria-selected="false" aria-controls="panel-perguntas" data-am-tab="perguntas" tabindex="-1">Perguntas</button>
+      <button class="am-tab"        type="button" role="tab" id="tab-contacto" aria-selected="false" aria-controls="panel-contacto" data-am-tab="contacto" tabindex="-1">Contacto</button>
+    </div>
+
+    <div class="am-panels">
+
+      <!-- ── 1) QUEM SOMOS ── -->
+      <section class="am-panel" role="tabpanel" id="panel-quem" aria-labelledby="tab-quem">
+        <p class="am-lead">
+          A Fashion Sport é uma loja online feita para quem vive o futebol. Do treino ao fim de semana,
+          queremos que cada cliente encontre aqui o equipamento certo, com acabamento cuidado e estilo
+          para dentro e fora do campo.
+        </p>
+        <p>
+          Trabalhamos com quatro categorias (tênis e chuteiras, camisetas de clubes, luvas e acessórios)
+          e fazemos questão de um atendimento próximo: cada pedido é confirmado diretamente consigo pelo WhatsApp.
+        </p>
+
+        <!-- Textos sugeridos: edite-os à vontade para refletirem a vossa loja -->
+        <div class="am-cards">
+          <div class="am-card">
+            <span class="am-card-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg></span>
+            <h4>Missão</h4>
+            <p>Levar a quem ama futebol equipamentos com qualidade, estilo e desempenho.</p>
+          </div>
+          <div class="am-card">
+            <span class="am-card-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg></span>
+            <h4>Visão</h4>
+            <p>Ser a loja de referência para os apaixonados por futebol.</p>
+          </div>
+          <div class="am-card">
+            <span class="am-card-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.7l-1-1.1a5.5 5.5 0 0 0-7.8 7.8l1 1.1L12 21l7.8-7.5 1-1.1a5.5 5.5 0 0 0 0-7.8z"/></svg></span>
+            <h4>Valores</h4>
+            <p>Qualidade, transparência e atendimento próximo.</p>
           </div>
         </div>
-      </div>
-    </section>
 
+        <!-- Factos opcionais: só aparecem se preencher STORE_INFO no script.js -->
+        <ul class="am-facts">
+          <li data-store="since" hidden><span>Desde</span><strong data-store-value></strong></li>
+          <li data-store="address" hidden><span>Morada</span><strong data-store-value></strong></li>
+          <li data-store="hours" hidden><span>Horário</span><strong data-store-value></strong></li>
+        </ul>
+      </section>
+
+      <!-- ── 2) PRODUTOS ── -->
+      <section class="am-panel" role="tabpanel" id="panel-produtos" aria-labelledby="tab-produtos" hidden>
+        <p class="am-lead">Quatro categorias para equipar o jogo de ponta a ponta.</p>
+
+        <div class="am-cats">
+          <div class="am-cat">
+            <img src="tenis6.jpg" alt="" loading="lazy">
+            <div class="am-cat-info">
+              <strong>Tênis &amp; Chuteiras</strong>
+              <span><b data-about-count="1">6</b> produtos · a partir de <b data-about-min="1">1400,99 MZN</b></span>
+            </div>
+            <button class="am-cat-go" type="button" data-about-cat="1">Ver produtos</button>
+          </div>
+          <div class="am-cat">
+            <img src="clube1.jpg" alt="" loading="lazy">
+            <div class="am-cat-info">
+              <strong>Camisetas de Clubes</strong>
+              <span><b data-about-count="2">9</b> produtos · a partir de <b data-about-min="2">790,00 MZN</b></span>
+            </div>
+            <button class="am-cat-go" type="button" data-about-cat="2">Ver produtos</button>
+          </div>
+          <div class="am-cat">
+            <img src="luvas7.jpg" alt="" loading="lazy">
+            <div class="am-cat-info">
+              <strong>Luvas Esportivas</strong>
+              <span><b data-about-count="3">6</b> produtos · a partir de <b data-about-min="3">300,00 MZN</b></span>
+            </div>
+            <button class="am-cat-go" type="button" data-about-cat="3">Ver produtos</button>
+          </div>
+          <div class="am-cat">
+            <img src="acessorio1.jpg" alt="" loading="lazy">
+            <div class="am-cat-info">
+              <strong>Acessórios</strong>
+              <span><b data-about-count="4">6</b> produtos · a partir de <b data-about-min="4">60,00 MZN</b></span>
+            </div>
+            <button class="am-cat-go" type="button" data-about-cat="4">Ver produtos</button>
+          </div>
+        </div>
+      </section>
+
+      <!-- ── 3) COMO COMPRAR ── -->
+      <section class="am-panel" role="tabpanel" id="panel-comprar" aria-labelledby="tab-comprar" hidden>
+        <p class="am-lead">Em quatro passos, sem complicações.</p>
+
+        <ol class="am-steps">
+          <li>
+            <strong>Escolha os produtos</strong>
+            <span>Navegue pelas categorias ou use a pesquisa (a lupa no topo) e abra o produto para ver os detalhes.</span>
+          </li>
+          <li>
+            <strong>Adicione ao carrinho</strong>
+            <span>Defina a quantidade e adicione. Pode ajustar ou remover itens no carrinho a qualquer momento.</span>
+          </li>
+          <li>
+            <strong>Preencha os seus dados</strong>
+            <span>Indique o nome, o telefone e o método de pagamento.</span>
+          </li>
+          <li>
+            <strong>Finalize no WhatsApp</strong>
+            <span>O pedido abre no WhatsApp com todos os itens e o total. Confirmamos consigo e enviamos as instruções de pagamento.</span>
+          </li>
+        </ol>
+
+        <h4 class="am-sub">Formas de pagamento</h4>
+        <div class="am-pay">
+          <span class="am-chip">Emola</span>
+          <span class="am-chip">M-Pesa</span>
+          <span class="am-chip">Banco (BCI)</span>
+        </div>
+      </section>
+
+      <!-- ── 4) PERGUNTAS FREQUENTES ── -->
+      <!-- <details> é um acordeão nativo do HTML: abre e fecha sem JavaScript -->
+      <section class="am-panel" role="tabpanel" id="panel-perguntas" aria-labelledby="tab-perguntas" hidden>
+        <p class="am-lead">As dúvidas mais comuns, respondidas.</p>
+
+        <details class="am-faq">
+          <summary>Como faço uma encomenda?</summary>
+          <p>Escolha os produtos, adicione ao carrinho, preencha o nome, o telefone e o método de pagamento e finalize. O pedido abre no WhatsApp já com todos os itens e o total.</p>
+        </details>
+        <details class="am-faq">
+          <summary>Quais são as formas de pagamento?</summary>
+          <p>Aceitamos Emola, M-Pesa e pagamento via Banco (BCI). Depois de enviar o pedido, confirmamos consigo e enviamos as instruções.</p>
+        </details>
+        <details class="am-faq">
+          <summary>Não encontrei o produto que procuro. E agora?</summary>
+          <p>Fale connosco pelo WhatsApp e diga-nos o modelo, o tamanho e o clube. Vamos ajudar.</p>
+        </details>
+        <details class="am-faq">
+          <summary>Como falo com a loja?</summary>
+          <p>Pelo WhatsApp, Instagram, Facebook ou e-mail. Temos atendimento online 24h.</p>
+        </details>
+
+        <!-- Só aparecem se preencher STORE_INFO.delivery / returns no script.js -->
+        <details class="am-faq" data-store="delivery" hidden>
+          <summary>Como funciona a entrega?</summary>
+          <p data-store-value></p>
+        </details>
+        <details class="am-faq" data-store="returns" hidden>
+          <summary>Posso trocar ou devolver?</summary>
+          <p data-store-value></p>
+        </details>
+      </section>
+
+      <!-- ── 5) CONTACTO ── -->
+      <section class="am-panel" role="tabpanel" id="panel-contacto" aria-labelledby="tab-contacto" hidden>
+        <p class="am-lead">Escolha o canal que preferir. Os links abrem numa nova aba.</p>
+
+        <div class="am-contacts">
+          <a class="am-contact" href="#" target="_blank" rel="noopener" data-about-link="wa">
+            <span class="am-contact-ico am-wa"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M20.52 3.48A11.86 11.86 0 0 0 12.06 0C5.5 0 .16 5.34.16 11.9c0 2.1.55 4.15 1.6 5.96L0 24l6.32-1.66a11.86 11.86 0 0 0 5.74 1.46h.01c6.56 0 11.9-5.34 11.9-11.9 0-3.18-1.24-6.16-3.45-8.42ZM12.07 21.7h-.01a9.8 9.8 0 0 1-4.99-1.37l-.36-.21-3.75.98 1-3.65-.24-.37a9.78 9.78 0 0 1-1.5-5.18c0-5.42 4.41-9.83 9.84-9.83 2.63 0 5.1 1.02 6.95 2.88a9.78 9.78 0 0 1 2.87 6.95c0 5.42-4.41 9.83-9.83 9.83Zm5.39-7.35c-.3-.15-1.77-.87-2.05-.97-.27-.1-.47-.15-.67.15-.2.3-.77.97-.94 1.17-.17.2-.35.22-.65.07-.3-.15-1.25-.46-2.39-1.46-.88-.79-1.48-1.76-1.65-2.06-.17-.3-.02-.46.13-.61.13-.13.3-.35.45-.52.15-.17.2-.3.3-.5.1-.2.05-.37-.02-.52-.07-.15-.67-1.62-.92-2.22-.24-.58-.49-.5-.67-.5h-.57c-.2 0-.52.07-.79.37-.27.3-1.04 1.02-1.04 2.5s1.07 2.91 1.22 3.11c.15.2 2.1 3.2 5.09 4.48.71.31 1.27.5 1.7.64.71.23 1.35.2 1.86.12.57-.08 1.77-.72 2.02-1.42.25-.7.25-1.29.17-1.42-.07-.12-.27-.2-.57-.35Z"/></svg></span>
+            <span class="am-contact-txt"><strong>WhatsApp</strong><small>Clique para conversar</small></span>
+          </a>
+          <a class="am-contact" href="#" target="_blank" rel="noopener" data-about-link="ig">
+            <span class="am-contact-ico am-ig"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M7.75 2C4.57 2 2 4.57 2 7.75v8.5C2 19.43 4.57 22 7.75 22h8.5C19.43 22 22 19.43 22 16.25v-8.5C22 4.57 19.43 2 16.25 2h-8.5Zm0 1.8h8.5c2.19 0 3.95 1.76 3.95 3.95v8.5c0 2.19-1.76 3.95-3.95 3.95h-8.5c-2.19 0-3.95-1.76-3.95-3.95v-8.5C3.8 5.56 5.56 3.8 7.75 3.8Zm8.9 1.35a1.2 1.2 0 1 0 0 2.4 1.2 1.2 0 0 0 0-2.4ZM12 6.85A5.15 5.15 0 1 0 17.15 12 5.16 5.16 0 0 0 12 6.85Zm0 1.8A3.35 3.35 0 1 1 8.65 12 3.35 3.35 0 0 1 12 8.65Z"/></svg></span>
+            <span class="am-contact-txt"><strong>Instagram</strong><small>@fashionsport</small></span>
+          </a>
+          <a class="am-contact" href="#" target="_blank" rel="noopener" data-about-link="fb">
+            <span class="am-contact-ico am-fb"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M13.5 22v-8.2h2.77l.42-3.22H13.5V8.52c0-.93.26-1.56 1.6-1.56h1.71V4.08c-.3-.04-1.31-.08-2.49-.08-2.46 0-4.14 1.5-4.14 4.26v2.3H7.4v3.22h2.78V22h3.32Z"/></svg></span>
+            <span class="am-contact-txt"><strong>Facebook</strong><small>/fashionsport</small></span>
+          </a>
+          <a class="am-contact" href="#" data-about-link="mail">
+            <span class="am-contact-ico am-mail"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M4 4h16a2 2 0 0 1 2 2v.4l-10 6.25L2 6.4V6a2 2 0 0 1 2-2Zm18 4.15V18a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V8.15l9.47 5.92a1 1 0 0 0 1.06 0L22 8.15Z"/></svg></span>
+            <span class="am-contact-txt"><strong>E-mail</strong><small>contato@fashionsport.com</small></span>
+          </a>
+        </div>
+
+        <ul class="am-facts">
+          <li data-store="address" hidden><span>Morada</span><strong data-store-value></strong></li>
+          <li data-store="hours" hidden><span>Horário</span><strong data-store-value></strong></li>
+        </ul>
+      </section>
+
+    </div>
+  </div>
+</div>
     <!-- ================= CONTATO ================= -->
     <section class="section" id="contato">
 
