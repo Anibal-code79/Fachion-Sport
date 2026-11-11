@@ -2556,3 +2556,251 @@ footer {
 @media (prefers-reduced-motion: reduce) {
   .hero-orb, .badge-dot, .hero-ring, .hero-float, .marquee-track { animation: none; }
 }
+
+/* =====================================================
+   COMMIT #4 — CSS DO CATÁLOGO
+   Cola no FIM do style.css.
+   Depende do Commit #3: o modal reutiliza as classes fp-*.
+   Prefixos: pc- = cartões de categoria, cg- = modal do catálogo.
+===================================================== */
+
+/* ── 1) GRELHA DE CATEGORIAS ───────────────────────── */
+.pc-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 22px;
+}
+
+/* ── 2) CARTÃO DE CATEGORIA ────────────────────────── */
+.pc-card {
+  position: relative;
+  isolation: isolate;                 /* cria um "mundo" próprio para os z-index internos */
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;          /* o texto fica colado à base */
+  min-height: 440px;
+  border-radius: 26px;
+  overflow: hidden;
+  cursor: pointer;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  background: #0b1020;
+  box-shadow: var(--shadow);
+
+  /* Inclinação 3D: --rx e --ry são atualizados pelo JS conforme o rato */
+  transform: perspective(900px) rotateX(var(--rx, 0deg)) rotateY(var(--ry, 0deg));
+  transition: transform 0.25s ease-out, border-color 0.35s ease, box-shadow 0.35s ease;
+}
+.pc-card:hover {
+  transform: perspective(900px) rotateX(var(--rx, 0deg)) rotateY(var(--ry, 0deg)) translateY(-8px);
+  border-color: rgba(255, 59, 95, 0.5);
+  box-shadow: 0 30px 60px rgba(0, 0, 0, 0.5), 0 0 40px rgba(255, 59, 95, 0.12);
+}
+.pc-card:focus-visible { outline: 2px solid var(--secondary); outline-offset: 4px; }
+
+/* Entrada em cascata: invisível até o JS pôr .active; depois sobe com atraso (--d).
+   "backwards" aplica o estado inicial só durante o atraso e depois larga o transform,
+   senão o hover/inclinação deixavam de funcionar. */
+.pc-card:not(.active) { opacity: 0; }
+.pc-card.active {
+  animation: pcRise 0.8s cubic-bezier(0.2, 0.7, 0.2, 1) backwards;
+  animation-delay: var(--d, 0s);
+}
+@keyframes pcRise {
+  from { opacity: 0; transform: perspective(900px) translateY(48px) scale(0.96); }
+}
+
+/* Foto de fundo + gradiente escuro para o texto ficar legível */
+.pc-media { position: absolute; inset: 0; z-index: -1; }
+.pc-media img {
+  width: 100%; height: 100%;
+  object-fit: cover;
+  transition: transform 0.9s ease, filter 0.5s ease;
+}
+.pc-media::after {
+  content: "";
+  position: absolute; inset: 0;
+  background: linear-gradient(180deg, rgba(8,12,24,0) 0%, rgba(8,12,24,0.15) 30%, rgba(8,12,24,0.86) 68%, rgba(8,12,24,0.97) 100%);
+  pointer-events: none;
+}
+.pc-card:hover .pc-media img { transform: scale(1.1); filter: brightness(0.9); }
+
+/* Brilho que segue o rato (--mx / --my vêm do JS) */
+.pc-card::after {
+  content: "";
+  position: absolute; inset: 0;
+  z-index: 3;
+  background: radial-gradient(420px circle at var(--mx, 50%) var(--my, 50%), rgba(255,255,255,0.14), transparent 45%);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  pointer-events: none;               /* o brilho NUNCA pode bloquear cliques */
+}
+.pc-card:hover::after { opacity: 1; }
+
+/* Número e contador em "vidro": legíveis sobre qualquer foto, até as de fundo branco */
+.pc-num, .pc-count {
+  position: absolute;
+  top: 18px;
+  z-index: 2;
+  background: rgba(10, 15, 28, 0.62);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  color: #fff;
+}
+.pc-num {
+  left: 18px;
+  display: grid; place-items: center;
+  width: 46px; height: 46px;
+  border-radius: 50%;
+  font-weight: 800;
+  font-size: 0.95rem;
+  letter-spacing: 0.04em;
+}
+.pc-count {
+  right: 18px;
+  padding: 8px 14px;
+  border-radius: 999px;
+  font-size: 0.78rem;
+  font-weight: 600;
+}
+
+/* Texto */
+.pc-body { position: relative; z-index: 2; padding: 22px; }
+.pc-body h3 { font-size: 1.35rem; line-height: 1.2; letter-spacing: -0.01em; margin-bottom: 8px; }
+.pc-body p {
+  color: rgba(255, 255, 255, 0.78);
+  font-size: 0.9rem;
+  margin-bottom: 18px;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+.pc-foot { display: flex; align-items: flex-end; justify-content: space-between; gap: 12px; }
+.pc-from small { display: block; font-size: 0.74rem; color: rgba(255, 255, 255, 0.6); }
+.pc-from strong { font-size: 1.2rem; font-weight: 800; white-space: nowrap; }
+
+/* Botão circular com seta: gira na diagonal e fica vermelho no hover */
+.pc-go {
+  display: grid; place-items: center;
+  width: 46px; height: 46px;
+  border-radius: 50%;
+  background: #fff;
+  color: #111827;
+  flex-shrink: 0;
+  transition: transform 0.35s ease, background 0.35s ease, color 0.35s ease;
+}
+.pc-go svg { width: 20px; height: 20px; }
+.pc-card:hover .pc-go { background: var(--primary); color: #fff; transform: rotate(-45deg); }
+
+/* ── 3) CONVITE FINAL (WhatsApp) ───────────────────── */
+.pc-cta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  margin-top: 36px;
+  padding: 26px 30px;
+  border-radius: 22px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  background:
+    radial-gradient(circle at top right, rgba(255, 59, 95, 0.18), transparent 55%),
+    rgba(255, 255, 255, 0.04);
+}
+.pc-cta h3 { font-size: 1.3rem; margin-bottom: 4px; }
+.pc-cta p { color: var(--muted); }
+
+/* ── 4) MODAL DO CATÁLOGO ──────────────────────────── */
+#category-modal .modal-content { max-width: 1040px; }   /* mais largo: cabem 4 colunas */
+
+.cg-head { padding-right: 56px; margin: 6px 0 20px; }   /* deixa espaço para o X */
+.cg-eyebrow {
+  display: inline-block;
+  margin-bottom: 8px;
+  font-size: 0.76rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--secondary);
+}
+.cg-head h2 { font-size: clamp(1.7rem, 3vw, 2.3rem); letter-spacing: -0.02em; margin-bottom: 6px; }
+.cg-head p { color: var(--muted); }
+
+/* Barra: contador à esquerda, ordenar à direita */
+.cg-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+  flex-wrap: wrap;
+  padding: 12px 0;
+  margin-bottom: 18px;
+  border-top: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+}
+.cg-count { font-weight: 600; color: var(--muted); font-size: 0.9rem; }
+.cg-sort { display: flex; align-items: center; gap: 10px; font-size: 0.85rem; color: var(--muted); }
+.cg-sort select {
+  padding: 9px 14px;
+  border-radius: 999px;
+  border: 1px solid var(--border);
+  background: rgba(255, 255, 255, 0.06);
+  color: var(--white);
+  font-family: inherit;
+  font-size: 0.85rem;
+  cursor: pointer;
+}
+.cg-sort select option { background: #111827; }         /* lista escura em vez de branca */
+
+/* Grelha automática: tantas colunas quantas couberem (mín. 220px cada) */
+.cg-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 18px;
+}
+.cg-grid .fp-card { flex: initial; min-width: 0; }      /* anula as regras do carrossel do Commit #3 */
+
+/* Entrada em cascata dos cartões ao abrir ou reordenar (--i = posição do cartão) */
+.cg-card { animation: cgIn 0.5s ease backwards; animation-delay: calc(var(--i, 0) * 60ms); }
+@keyframes cgIn { from { opacity: 0; transform: translateY(26px) scale(0.97); } }
+
+/* ── 5) RESPONSIVO ─────────────────────────────────── */
+@media (max-width: 992px) {
+  .pc-grid { grid-template-columns: repeat(2, 1fr); }
+  .pc-card { min-height: 400px; }
+}
+@media (max-width: 600px) {
+  .pc-grid { grid-template-columns: 1fr; gap: 18px; }
+  .pc-card { min-height: 360px; }
+  .pc-cta { flex-direction: column; align-items: flex-start; padding: 22px; }
+  .pc-cta .btn { width: 100%; max-width: none; }
+  .cg-toolbar { flex-direction: column; align-items: flex-start; }
+}
+
+/* ── 6) ACESSIBILIDADE ─────────────────────────────── */
+@media (prefers-reduced-motion: reduce) {
+  .pc-card:not(.active) { opacity: 1; }
+  .pc-card, .pc-card.active, .cg-card { animation: none; transition: none; }
+  .pc-media img, .pc-go { transition: none; }
+}
+.fp-actions {
+  display: flex;
+  flex-wrap: wrap;           /* permite descer para a linha seguinte */
+  gap: 6px;
+}
+.fp-btn {
+  flex: 1 1 auto;            /* cresce para preencher, tamanho base = o texto */
+  min-width: 0;
+  padding: 10px 10px;        /* mais compacto (era 11px 12px) */
+  font-size: 0.8rem;         /* era 0.85rem */
+  gap: 6px;                  /* espaço entre o ícone e o texto (era 8px) */
+}
+.fp-btn-buy { flex-grow: 1.25; }   /* "Adicionar" fica ligeiramente maior */
+
+/* 2) Modal: colunas mais largas.
+      Mínimo 250px (era 220px): em vez de 4 cartões apertados, 3 confortáveis. */
+.cg-grid { grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); }
+
+/* 3) Rede de segurança: nomes ou descrições compridas nunca saem do cartão */
+.fp-body { min-width: 0; }
+.fp-name, .fp-desc { overflow-wrap: break-word; }

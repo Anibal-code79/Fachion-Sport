@@ -759,65 +759,237 @@ function renderProductModal(productId) {
   openModal($("#product-modal"));
   // Abre o modal do produto (depois de tudo estar preparado)
 }
-function openCategoryModal(categoryId) {
-  // Abre o modal com a galeria de produtos de uma categoria
 
-  const cat = categories[categoryId];
-  // Busca os dados da categoria pelo ID
+/* COMMIT #4 — JS DO CATÁLOGO*/
 
-  if (!cat) return;
-  // Sai se a categoria não existir
+let currentCatalogId = null;     // categoria aberta neste momento
+let catalogSort = "default";     // ordenação escolhida
 
-  // Gera o HTML para cada produto da categoria
-  const itemsHTML = cat.items
-    .map((productId) => {
-      // Percorre o array de IDs de produtos desta categoria
+/* ── 1) ORDENAR ────────────────────────────────────── */
+function sortProductIds(ids, mode) {
+  const list = [...ids];         // cópia: nunca alteramos o array original de "categories"
+  if (mode === "price-asc")  list.sort((a, b) => products[a].price - products[b].price);
+  else if (mode === "price-desc") list.sort((a, b) => products[b].price - products[a].price);
+  else if (mode === "name")  list.sort((a, b) => products[a].name.localeCompare(products[b].name, "pt"));
+  else list.sort((a, b) => (products[b].featured ? 1 : 0) - (products[a].featured ? 1 : 0)); // destaques primeiro
+  return list;
+}
 
-      const p = products[productId];
-      // Busca os dados de cada produto
+/* ── 2) HTML DE UM CARTÃO (mesmo estilo dos destaques) ─ */
+function catalogCardHTML(id, index) {
+  const p = products[id];
+  const fav = isFavorite(id);
+  const badge = p.featured
+    ? `<span class="fp-badge"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.1 6.3 6.9 1-5 4.9 1.2 6.8L12 17.8 5.8 21l1.2-6.8-5-4.9 6.9-1z"/></svg>Destaque</span>`
+    : "";
 
-      if (!p) return "";
-      // Se o produto não existir, devolve string vazia
+  return `
+    <article class="fp-card cg-card" style="--i:${index}">
+      <button class="fp-media" type="button" data-fp-open="${id}" aria-label="Ver detalhes de ${p.name}">
+        <img src="${p.images[0]}" alt="${p.name}" loading="lazy">
+        ${badge}
+      </button>
 
-      return `
-        <div class="category-item">
-          <img src="${p.images[0]}" alt="${p.name}">
-          <div class="category-item-body">
-            <h4>${p.name}</h4>
-            <p>${money(p.price)}</p>
-            <div class="category-item-actions">
-              <button class="btn btn-outline" type="button" data-open-product="${productId}">
-                Ver produto
-              </button>
-              <!-- data-open-product é lido por setupGlobalClicks() -->
+      <button class="fp-fav ${fav ? "active" : ""}" type="button" data-fp-fav="${id}"
+              aria-pressed="${fav}" aria-label="Guardar nos favoritos">
+        <svg viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.7l-1-1.1a5.5 5.5 0 0 0-7.8 7.8l1 1.1L12 21l7.8-7.5 1-1.1a5.5 5.5 0 0 0 0-7.8z"/>
+        </svg>
+      </button>
 
-              <button class="btn btn-primary" type="button" data-quick-add="${productId}">
-                Adicionar
-              </button>
-              <!-- data-quick-add adiciona 1 unidade ao carrinho sem abrir o produto -->
-            </div>
-          </div>
+      <div class="fp-body">
+        <h3 class="fp-name">${p.name}</h3>
+        <p class="fp-desc">${p.desc}</p>
+        <div class="fp-price-row"><span class="fp-price">${money(p.price)}</span></div>
+        <div class="fp-actions">
+          <button class="fp-btn fp-btn-ghost" type="button" data-fp-open="${id}">Ver detalhes</button>
+          <button class="fp-btn fp-btn-buy" type="button" data-fp-add="${id}">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/>
+            </svg>
+            <span>Adicionar</span>
+          </button>
         </div>
-      `;
-    })
-    .join("");
-    // Junta todos os cards de produtos num único string HTML
+      </div>
+    </article>`;
+}
 
-  // Insere o conteúdo no modal da categoria
-  $("#category-modal-content").innerHTML = `
-    <div class="category-head">
+/* ── 3) DESENHAR SÓ A GRELHA (ao ordenar não refaz o cabeçalho) ── */
+function renderCatalogGrid() {
+  const cat  = categories[currentCatalogId];
+  const grid = document.getElementById("cgGrid");
+  const count = document.getElementById("cgCount");
+  if (!cat || !grid || !count) return;
+
+  // filter(...) ignora ids que não existam em "products" (evita erro por engano de digitação)
+  const ids = sortProductIds(cat.items.filter((id) => products[id]), catalogSort);
+
+  count.textContent = `${ids.length} ${ids.length === 1 ? "produto" : "produtos"}`;
+  grid.innerHTML = ids.map((id, i) => catalogCardHTML(id, i)).join("");
+}
+
+/* ── 4) EVENTOS DO MODAL (ligados uma só vez) ───────── */
+function onCatalogClick(e) {
+  const catModal = document.getElementById("category-modal");
+
+  // a) Ver detalhes: fecha o catálogo primeiro (os dois modais têm o mesmo z-index,
+  //    e o do catálogo está mais abaixo no HTML: tapava o do produto)
+  const openBtn = e.target.closest("[data-fp-open]");
+  if (openBtn) {
+    closeModal(catModal);
+    renderProductModal(Number(openBtn.dataset.fpOpen));
+    return;
+  }
+
+  // b) Coração
+  const favBtn = e.target.closest("[data-fp-fav]");
+  if (favBtn) {
+    const active = toggleFavorite(favBtn.dataset.fpFav);
+    favBtn.classList.remove("active");
+    void favBtn.offsetWidth;                // reinicia a animação
+    favBtn.classList.toggle("active", active);
+    favBtn.setAttribute("aria-pressed", String(active));
+    showToast(active ? "Adicionado aos favoritos" : "Removido dos favoritos");
+    return;
+  }
+
+  // c) Adicionar: o modal NÃO fecha (o cliente continua a escolher)
+  const addBtn = e.target.closest("[data-fp-add]");
+  if (addBtn) {
+    const id = Number(addBtn.dataset.fpAdd);
+    addToCart(id, 1);
+
+    const label = addBtn.querySelector("span");
+    addBtn.classList.add("added");
+    label.textContent = "Adicionado";
+    setTimeout(() => { addBtn.classList.remove("added"); label.textContent = "Adicionar"; }, 1600);
+
+    // O carrinho está mais acima no HTML: fechamos o catálogo para ele ficar visível
+    showToast(`${products[id].name} no carrinho`, "Ver carrinho", () => {
+      closeModal(catModal);
+      openCart();
+    });
+  }
+}
+
+function onCatalogChange(e) {
+  if (e.target.id === "cgSort") {
+    catalogSort = e.target.value;
+    renderCatalogGrid();
+  }
+}
+
+/* ── 5) ABRIR O CATÁLOGO (substitui a função antiga, mesmo nome) ── */
+function openCategoryModal(categoryId) {
+  const cat = categories[categoryId];
+  if (!cat) return;
+
+  currentCatalogId = categoryId;
+  catalogSort = "default";
+
+  const holder = document.getElementById("category-modal-content");
+  holder.innerHTML = `
+    <div class="cg-head">
+      <span class="cg-eyebrow">Categoria</span>
       <h2>${cat.name}</h2>
       <p>${cat.desc}</p>
     </div>
-    <div class="category-items-grid">
-      ${itemsHTML}
-    </div>
-  `;
 
-  openModal($("#category-modal"));
-  // Abre o modal depois do conteúdo estar inserido
+    <div class="cg-toolbar">
+      <span class="cg-count" id="cgCount"></span>
+      <label class="cg-sort">
+        <span>Ordenar por</span>
+        <select id="cgSort">
+          <option value="default">Destaques</option>
+          <option value="price-asc">Menor preço</option>
+          <option value="price-desc">Maior preço</option>
+          <option value="name">Nome (A–Z)</option>
+        </select>
+      </label>
+    </div>
+
+    <div class="cg-grid" id="cgGrid"></div>
+  `;
+  renderCatalogGrid();
+
+  // O contentor é o mesmo sempre; só o interior muda. Por isso ligamos os eventos uma vez.
+  if (!holder.dataset.bound) {
+    holder.dataset.bound = "1";
+    holder.addEventListener("click", onCatalogClick);
+    holder.addEventListener("change", onCatalogChange);
+  }
+
+  openModal(document.getElementById("category-modal"));
+
+  // Abre sempre no topo (o modal pode ter ficado a meio da lista anterior)
+  const box = document.querySelector("#category-modal .modal-content");
+  if (box) box.scrollTop = 0;
 }
 
+/* ── 6) CARTÕES DE CATEGORIA NA PÁGINA ──────────────── */
+function setupCatalog() {
+
+  // a) Contador e preço mínimo calculados a partir dos dados
+  Object.keys(categories).forEach((catId) => {
+    const ids = categories[catId].items.filter((id) => products[id]);
+    const prices = ids.map((id) => products[id].price);
+
+    const countEl = document.querySelector(`[data-cat-count="${catId}"]`);
+    const minEl   = document.querySelector(`[data-cat-min="${catId}"]`);
+
+    if (countEl) countEl.textContent = `${ids.length} ${ids.length === 1 ? "produto" : "produtos"}`;
+    if (minEl && prices.length) minEl.textContent = money(Math.min(...prices));  // "..." espalha o array como argumentos
+  });
+
+  // b) Links de WhatsApp com mensagem própria (data-wa)
+  $$("[data-wa]").forEach((a) => { a.href = waLink(a.dataset.wa); });
+
+  // c) Inclinação 3D e brilho: só com rato e se o sistema não pediu menos movimento
+  const canHover = window.matchMedia("(hover: hover) and (pointer: fine)").matches;
+  const reduce   = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  const cards = $$(".pc-card");
+
+  cards.forEach((card) => {
+    if (canHover && !reduce) {
+      card.addEventListener("pointermove", (e) => {
+        const r = card.getBoundingClientRect();
+        const x = (e.clientX - r.left) / r.width;    // 0 (esquerda) a 1 (direita)
+        const y = (e.clientY - r.top) / r.height;    // 0 (topo) a 1 (base)
+        card.style.setProperty("--mx", `${x * 100}%`);
+        card.style.setProperty("--my", `${y * 100}%`);
+        card.style.setProperty("--rx", `${(0.5 - y) * 8}deg`);   // máx. 4° para cada lado
+        card.style.setProperty("--ry", `${(x - 0.5) * 8}deg`);
+      });
+      card.addEventListener("pointerleave", () => {
+        card.style.setProperty("--rx", "0deg");
+        card.style.setProperty("--ry", "0deg");
+      });
+    }
+
+    // Teclado: Enter ou Espaço abrem o cartão (um <article> não faz isto sozinho)
+    card.addEventListener("keydown", (e) => {
+      if (e.key === "Enter" || e.key === " ") {
+        e.preventDefault();
+        card.click();
+      }
+    });
+  });
+
+  // d) Entrada em cascata quando os cartões aparecem no ecrã
+  if ("IntersectionObserver" in window) {
+    const io = new IntersectionObserver((entries, obs) => {
+      entries.forEach((en) => {
+        if (en.isIntersecting) {
+          en.target.classList.add("active");
+          obs.unobserve(en.target);
+        }
+      });
+    }, { threshold: 0.15 });
+    cards.forEach((c) => io.observe(c));
+  } else {
+    cards.forEach((c) => c.classList.add("active"));   // navegador antigo: mostra tudo logo
+  }
+}
 
 /* =========================
    12) RENDERIZAR E ABRIR O CARRINHO
@@ -1235,6 +1407,7 @@ function init() {
   setupHeaderScroll();
   setupMobileMenu();
   setupCountUp();
+  setupCatalog()
 }
 /*COMMIT #3 — JS DOS PRODUTOS EM DESTAQUE */
 

@@ -245,132 +245,107 @@
   </div>
 </section>
 
-    <!-- ================= PRODUTOS ================= -->
-    <section class="section" id="produtos">
-    <!-- secção com id="produtos" para ser alcançada pelos links de navegação -->
+<!--COMMIT #4 — CATÁLOGO (secção "Nossos produtos")-->
+<section class="section" id="produtos">
+  <div class="container">
 
-      <div class="container">
+    <div class="section-title reveal">
+      <span>Nossos produtos</span>
+      <h2>Vista-se como um verdadeiro campeão.</h2>
+      <p>Qualidade profissional para dentro e fora do campo</p>
+    </div>
 
-        <div class="section-title reveal">
-        <!-- div com o título e subtítulo da secção -->
+    <!-- Cada cartão inteiro é clicável: data-open-category está no próprio <article>.
+         --d é o atraso da animação de entrada (cria o efeito "em cascata").
+         Os valores dentro de data-cat-count / data-cat-min são recalculados pelo JS. -->
+    <div class="pc-grid">
 
-          <span>Nossos produtos</span>
-          <h2>Vista-se como um verdadeiro campeão.</h2>
-          <!-- <span> inline, aqui usado como rótulo/label colorido acima do título -->
-
-          <p>Qualidade profissional para dentro e fora do campo</p>
-          <!-- parágrafo de subtítulo da secção -->
+      <article class="pc-card" data-open-category="1" tabindex="0" role="button"
+               aria-label="Explorar Tênis e Chuteiras" style="--d:0s">
+        <div class="pc-media"><img src="tenis6.jpg" alt="" loading="lazy"></div>
+        <span class="pc-num">01</span>
+        <span class="pc-count" data-cat-count="1">6 produtos</span>
+        <div class="pc-body">
+          <h3>Tênis &amp; Chuteiras</h3>
+          <p>Modelos para futebol, futsal e treino. Conforto e aderência.</p>
+          <div class="pc-foot">
+            <div class="pc-from"><small>A partir de</small><strong data-cat-min="1">1400,99 MZN</strong></div>
+            <span class="pc-go" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+            </span>
+          </div>
         </div>
+      </article>
 
-        <div class="products-grid">
-        <!-- grelha CSS que organiza os produtos em 4 colunas -->
-
-          <!-- ===== CARD DE PRODUTO 1: TÊNIS/CHUTEIRAS ===== -->
-          <article class="product-card">
-          <!-- <article> é semântico para conteúdo independente (um produto é autocontido) -->
-
-            <div class="product-image">
-            <!-- div da imagem do produto -->
-
-              <img src="tenis6.jpg" alt="Tênis e chuteiras">
-              <!-- imagem do produto com texto alternativo descritivo -->
-
-              <div class="product-overlay">
-              <!-- camada que aparece sobre a imagem quando se passa o rato (hover) -->
-
-                <button class="overlay-btn" type="button" data-open-category="1">Ver detalhes</button>
-                <!-- data-open-category="1" é um atributo customizado (data attribute) -->
-                <!-- o JavaScript lê este valor para saber qual categoria abrir -->
-              </div>
-            </div>
-
-            <div class="product-content">
-            <!-- área de texto abaixo da imagem do produto -->
-
-              <div class="category">⚽ Tênis / Chuteiras</div>
-              <!-- rótulo da categoria com ícone emoji -->
-
-              <h3>Tênis & Chuteiras</h3>
-              <!-- <h3> título do produto (nível 3 de hierarquia) -->
-
-              <p>Modelos para futebol, futsal e treino. Conforto e aderência.</p>
-              <!-- descrição curta do produto -->
-
-              <div class="product-footer">
-              <!-- div com preço e botão de compra lado a lado -->
-
-                <span class="price">A partir de 1300,00</span>
-                <!-- preço do produto -->
-
-                <button class="mini-link" type="button" data-open-category="1">Comprar</button>
-                <!-- botão pequeno que também abre a categoria 1, igual ao "Ver detalhes" -->
-              </div>
-            </div>
-          </article>
-
-          <!-- ===== CARD DE PRODUTO 2: CAMISETAS ===== -->
-          <article class="product-card">
-            <div class="product-image">
-              <img src="clube1.jpg" alt="Camisetas de clubes">
-              <div class="product-overlay">
-                <button class="overlay-btn" type="button" data-open-category="2">Ver detalhes</button>
-                <!-- data-open-category="2" abre a categoria de camisetas -->
-              </div>
-            </div>
-            <div class="product-content">
-              <div class="category">👕 Camisetas de Clubes</div>
-              <h3>Camisetas de Clubes</h3>
-              <p>Estilo de jogo e lifestyle. Vários tamanhos, modelos e tecidos originais.</p>
-              <div class="product-footer">
-                <span class="price">A partir de 1000,00</span>
-                <button class="mini-link" type="button" data-open-category="2">Comprar</button>
-              </div>
-            </div>
-          </article>
-          <!-- ===== CARD DE PRODUTO 3: LUVAS ===== -->
-          <article class="product-card reveal">
-            <div class="product-image">
-              <img src="luvas7.jpg" alt="Luvas esportivas">
-              <div class="product-overlay">
-                <button class="overlay-btn" type="button" data-open-category="3">Ver detalhes</button>
-                <!-- data-open-category="3" abre a categoria de luvas -->
-              </div>
-            </div>
-            <div class="product-content">
-              <div class="category">🧤 Luvas Esportivas</div>
-              <h3>Luvas Esportivas</h3>
-              <p>Mais grip, proteção e conforto para treino e jogo de transformacao ao campo.</p>
-              <div class="product-footer">
-                <span class="price">A partir de 300,00</span>
-                <button class="mini-link" type="button" data-open-category="3">Comprar</button>
-              </div>
-            </div>
-          </article>
-
-          <!-- ===== CARD DE PRODUTO 4: ACESSÓRIOS ===== -->
-          <article class="product-card">
-            <div class="product-image">
-              <img src="acessorio1.jpg" alt="Acessórios esportivos">
-              <div class="product-overlay">
-                <button class="overlay-btn" type="button" data-open-category="4">Ver detalhes</button>
-                <!-- data-open-category="4" abre a categoria de acessórios -->
-              </div>
-            </div>
-            <div class="product-content">
-              <div class="category">🎒 Acessórios</div>
-              <h3>Acessórios</h3>
-              <p>Bolsas, meias, Bolas entre outros acessorios de qualidade no campo onde ha transformacao.</p>
-              <div class="product-footer">
-                <span class="price">A partir de 60,00</span>
-                <button class="mini-link" type="button" data-open-category="4">Comprar</button>
-              </div>
-            </div>
-          </article>
-
+      <article class="pc-card" data-open-category="2" tabindex="0" role="button"
+               aria-label="Explorar Camisetas de Clubes" style="--d:0.12s">
+        <div class="pc-media"><img src="clube1.jpg" alt="" loading="lazy"></div>
+        <span class="pc-num">02</span>
+        <span class="pc-count" data-cat-count="2">9 produtos</span>
+        <div class="pc-body">
+          <h3>Camisetas de Clubes</h3>
+          <p>Estilo de jogo e lifestyle. Vários tamanhos, modelos e tecidos originais.</p>
+          <div class="pc-foot">
+            <div class="pc-from"><small>A partir de</small><strong data-cat-min="2">790,00 MZN</strong></div>
+            <span class="pc-go" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+            </span>
+          </div>
         </div>
-        <!-- fim .products-grid -->
+      </article>
+
+      <article class="pc-card" data-open-category="3" tabindex="0" role="button"
+               aria-label="Explorar Luvas Esportivas" style="--d:0.24s">
+        <div class="pc-media"><img src="luvas7.jpg" alt="" loading="lazy"></div>
+        <span class="pc-num">03</span>
+        <span class="pc-count" data-cat-count="3">6 produtos</span>
+        <div class="pc-body">
+          <h3>Luvas Esportivas</h3>
+          <p>Mais grip, proteção e conforto para treino e jogo, da transformação ao campo.</p>
+          <div class="pc-foot">
+            <div class="pc-from"><small>A partir de</small><strong data-cat-min="3">300,00 MZN</strong></div>
+            <span class="pc-go" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+            </span>
+          </div>
+        </div>
+      </article>
+
+      <article class="pc-card" data-open-category="4" tabindex="0" role="button"
+               aria-label="Explorar Acessórios" style="--d:0.36s">
+        <div class="pc-media"><img src="acessorio1.jpg" alt="" loading="lazy"></div>
+        <span class="pc-num">04</span>
+        <span class="pc-count" data-cat-count="4">6 produtos</span>
+        <div class="pc-body">
+          <h3>Acessórios</h3>
+          <p>Bolsas, meias, bolas e outros acessórios de qualidade para o campo onde há transformação.</p>
+          <div class="pc-foot">
+            <div class="pc-from"><small>A partir de</small><strong data-cat-min="4">60,00 MZN</strong></div>
+            <span class="pc-go" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+            </span>
+          </div>
+        </div>
+      </article>
+
+    </div>
+
+    <!-- Convite final: leva o cliente ao WhatsApp com mensagem pronta.
+         O href é preenchido pelo JS a partir de data-wa. -->
+    <div class="pc-cta reveal">
+      <div>
+        <h3>Não encontrou o que procura?</h3>
+        <p>Diga-nos o modelo, o tamanho e o clube. Respondemos pelo WhatsApp.</p>
       </div>
-    </section>
+      <a class="btn btn-primary" href="#" target="_blank" rel="noopener"
+         data-wa="Olá! Procuro um produto que não encontrei no site.">
+        Falar no WhatsApp
+        <svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+      </a>
+    </div>
+
+  </div>
+</section>
 
     <!-- ================= SOBRE ================= -->
     <section class="section" id="sobre">
