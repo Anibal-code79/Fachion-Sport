@@ -195,9 +195,6 @@
     </div>
   </div>
 
-  <!-- ── FAIXA QUE DESLIZA ─────────────────────────────
-       O conteúdo está repetido 2x de propósito: a animação move
-       a faixa 50% para a esquerda e volta ao início sem salto. -->
   <div class="hero-marquee" aria-hidden="true">
     <div class="marquee-track">
       <span>Tênis &amp; Chuteiras</span><i></i>
@@ -218,16 +215,33 @@
 
 </section>
 
-    <!-- ================= PRODUTOS EM DESTAQUE ================= -->
-<section class="section featured-section" id="destaques">
+<!--SECÇÃO DE PRODUTOS EM DESTAQUE-->
+<section class="section fp-section" id="destaques">
   <div class="container">
-    <div class="section-title reveal">
-      <span>Produtos em destaque</span>
-      <h2>Os favoritos da Fashion Sport</h2>
-      <p>Confira alguns dos produtos mais procurados da nossa coleção.</p>
+    <div class="fp-head reveal">
+      <div class="fp-head-text">
+        <span class="fp-eyebrow">Produtos em destaque</span>
+        <h2>Os favoritos da Fashion Sport</h2>
+        <p>Confira alguns dos produtos mais procurados da nossa coleção.</p>
+      </div>
+
+      <div class="fp-nav">
+        <button class="fp-arrow" id="fpPrev" type="button" aria-label="Produtos anteriores">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="15 18 9 12 15 6"/>
+          </svg>
+        </button>
+        <button class="fp-arrow" id="fpNext" type="button" aria-label="Próximos produtos">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="9 6 15 12 9 18"/>
+          </svg>
+        </button>
+      </div>
     </div>
 
-    <div class="featured-grid" id="featured-products"></div>
+    <!-- Faixa com os cartões (scroll horizontal com "snap") -->
+    <div class="fp-track" id="featured-products" aria-label="Lista de produtos em destaque"></div>
+
   </div>
 </section>
 
